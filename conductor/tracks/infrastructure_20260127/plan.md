@@ -11,7 +11,7 @@
 - [ ] Task: Conductor - User Manual Verification 'Python Engine Verification' (Protocol in workflow.md)
 
 ## Phase 2: Electron Bridge & Service Verification
-- [ ] Task: Implement unit tests for `TtsService.ts`.
+- [x] Task: Implement unit tests for `TtsService.ts`. 7adb14b
     - [ ] Write tests for CLI argument generation.
     - [ ] Mock `spawn` to verify environment variables (HF_HUB_OFFLINE, PYTHONPATH).
 - [ ] Task: Implement unit tests for `PythonService.ts` and `VoiceService.ts`.
