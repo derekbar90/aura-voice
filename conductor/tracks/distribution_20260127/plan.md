@@ -2,8 +2,8 @@
 
 ## Phase 1: Automated Distribution (CI/CD)
 - [x] Task: Create `.github/workflows/release.yml` for macOS builds. e881d9e
-- [ ] Task: Configure environment mapping for GitHub Secrets (APPLE_ID, APPLE_ID_PASSWORD, etc.).
-- [ ] Task: Implement automated versioning and release creation logic.
+- [x] Task: Configure environment mapping for GitHub Secrets (APPLE_ID, APPLE_ID_PASSWORD, etc.). cf2b61a
+- [x] Task: Implement automated versioning and release creation logic. cf1d375
 - [ ] Task: Conductor - User Manual Verification 'Automated Distribution (CI/CD)' (Protocol in workflow.md)
 
 ## Phase 2: Code Signing & Notarization (Local)
