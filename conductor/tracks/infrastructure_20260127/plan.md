@@ -14,7 +14,7 @@
 - [x] Task: Implement unit tests for `TtsService.ts`. 7adb14b
     - [ ] Write tests for CLI argument generation.
     - [ ] Mock `spawn` to verify environment variables (HF_HUB_OFFLINE, PYTHONPATH).
-- [ ] Task: Implement unit tests for `PythonService.ts` and `VoiceService.ts`.
+- [x] Task: Implement unit tests for `PythonService.ts` and `VoiceService.ts`. 91ae818
 - [ ] Task: Conductor - User Manual Verification 'Electron Bridge & Service Verification' (Protocol in workflow.md)
 
 ## Phase 3: Packaging Configuration & Verification
