@@ -17,3 +17,8 @@
 - [x] Task: Verify high-resolution icon assets and metadata. b883935
 - [x] Task: Conduct a final "Fresh Install" verification from a GitHub Release artifact. 7a81a27
 - [ ] Task: Conductor - User Manual Verification 'App Store Compliance & Final Polish' (Protocol in workflow.md)
+
+## Phase 4: Conventional Commits & Automated Versioning
+- [x] Task: Install and configure `commitlint` and `husky` for message validation. 219aa69
+- [ ] Task: Update GitHub workflow to use `semantic-release` or equivalent for auto-tagging.
+- [ ] Task: Conductor - User Manual Verification 'Conventional Commits & Automated Versioning' (Protocol in workflow.md)
