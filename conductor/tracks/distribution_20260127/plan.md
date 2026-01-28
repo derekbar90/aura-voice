@@ -8,7 +8,7 @@
 
 ## Phase 2: Code Signing & Notarization (Local)
 - [x] Task: Set up local environment variables for signing (`CSC_LINK`, `CSC_KEY_PASSWORD`). e8125c0
-- [ ] Task: Implement notarization script in `menubar-tts/electron/notarize.cjs`.
+- [x] Task: Implement notarization script in `menubar-tts/electron/notarize.cjs`. 2e966ef
 - [ ] Task: Update `electron-builder.json5` to call the notarization script `afterSign`.
 - [ ] Task: Conductor - User Manual Verification 'Code Signing & Notarization (Local)' (Protocol in workflow.md)
 
