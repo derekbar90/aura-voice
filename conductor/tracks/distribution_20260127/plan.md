@@ -13,7 +13,7 @@
 - [ ] Task: Conductor - User Manual Verification 'Code Signing & Notarization (Local)' (Protocol in workflow.md)
 
 ## Phase 3: App Store Compliance & Final Polish
-- [ ] Task: Audit `entitlements.mac.plist` for App Store sandboxing requirements.
+- [x] Task: Audit `entitlements.mac.plist` for App Store sandboxing requirements. 3667ec6
 - [ ] Task: Verify high-resolution icon assets and metadata.
 - [ ] Task: Conduct a final "Fresh Install" verification from a GitHub Release artifact.
 - [ ] Task: Conductor - User Manual Verification 'App Store Compliance & Final Polish' (Protocol in workflow.md)
