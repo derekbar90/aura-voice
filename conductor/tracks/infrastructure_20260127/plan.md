@@ -20,6 +20,6 @@
 ## Phase 3: Packaging Configuration & Verification
 - [x] Task: Audit and update `electron-builder.json5` for macOS. 6f56b7b
     - [ ] Ensure all necessary assets and scripts are included in the bundle.
-- [ ] Task: Configure the bundling of the Python `.venv` or equivalent distribution method.
+- [x] Task: Configure the bundling of the Python `.venv` or equivalent distribution method. 95d81ea
 - [ ] Task: Create a post-build verification script to check the integrity of the packaged app.
 - [ ] Task: Conductor - User Manual Verification 'Packaging Configuration & Verification' (Protocol in workflow.md)
