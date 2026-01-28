@@ -1,15 +1,30 @@
 // @see - https://www.electron.build/configuration/configuration
 {
   "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
-  "appId": "YourAppID",
+  "appId": "com.derekbarrera.readmethis",
   "asar": true,
-  "productName": "YourAppName",
+  "productName": "Qwen3 Voice Studio",
   "directories": {
     "output": "release/${version}"
   },
   "files": [
     "dist",
-    "dist-electron"
+    "dist-electron",
+    "public"
+  ],
+  "extraResources": [
+    {
+      "from": "..",
+      "to": "python-engine",
+      "filter": [
+        "Qwen3-TTS-12Hz-0.6B-Base-6bit/**",
+        ".venv/**",
+        "tts_server.py",
+        "tts_entry.py",
+        "patch_mlx.py",
+        "pyproject.toml"
+      ]
+    }
   ],
   "mac": {
     "target": [
@@ -17,31 +32,9 @@
     ],
     "entitlements": "entitlements.mac.plist",
     "extendInfo": {
-      "NSMicrophoneUsageDescription": "This app needs access to your microphone to clone your voice for text-to-speech."
+      "NSMicrophoneUsageDescription": "This app needs access to your microphone to clone your voice for text-to-speech.",
+      "LSUIElement": true
     },
-    "artifactName": "${productName}-Mac-${version}-Installer.${ext}"
-  },
-  "win": {
-    "target": [
-      {
-        "target": "nsis",
-        "arch": [
-          "x64"
-        ]
-      }
-    ],
-    "artifactName": "${productName}-Windows-${version}-Setup.${ext}"
-  },
-  "nsis": {
-    "oneClick": false,
-    "perMachine": false,
-    "allowToChangeInstallationDirectory": true,
-    "deleteAppDataOnUninstall": false
-  },
-  "linux": {
-    "target": [
-      "AppImage"
-    ],
-    "artifactName": "${productName}-Linux-${version}.${ext}"
+    "artifactName": "${productName}-Mac-${version}.${ext}"
   }
 }

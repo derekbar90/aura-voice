@@ -35,7 +35,7 @@ function initializeServices() {
   const userDataPath = app.getPath('userData')
   const appRoot = process.env.APP_ROOT || path.join(__dirname, '..') // Fallback if env missing
   
-  pythonService = new PythonService(appRoot)
+  pythonService = new PythonService(appRoot, app.isPackaged, process.resourcesPath)
   voiceService = new VoiceService(userDataPath)
   ttsService = new TtsService(pythonService, userDataPath)
 }
