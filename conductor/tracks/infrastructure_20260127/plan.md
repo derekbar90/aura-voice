@@ -1,7 +1,7 @@
 # Implementation Plan: Project Infrastructure Verification & Packaging
 
 ## Phase 1: Python Engine Verification
-- [ ] Task: Set up `pytest` infrastructure and coverage reporting.
+- [x] Task: Set up `pytest` infrastructure and coverage reporting. b1c58ad
 - [ ] Task: Implement health-check tests for `tts_server.py`.
     - [ ] Write tests for model loading and health endpoint.
     - [ ] Implement health check logic.
