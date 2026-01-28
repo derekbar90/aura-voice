@@ -34,11 +34,14 @@
       ]
     }
   ],
+  "afterSign": "electron/notarize.cjs",
   "mac": {
     "target": [
       "dmg"
     ],
     "entitlements": "entitlements.mac.plist",
+    "gatekeeperAssess": false,
+    "hardenedRuntime": true,
     "extendInfo": {
       "NSMicrophoneUsageDescription": "This app needs access to your microphone to clone your voice for text-to-speech.",
       "LSUIElement": true
