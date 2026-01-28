@@ -4,6 +4,13 @@
   "appId": "com.derekbarrera.readmethis",
   "asar": true,
   "productName": "Qwen3 Voice Studio",
+  "publish": [
+    {
+      "provider": "github",
+      "owner": "derekbarrera",
+      "repo": "readmethis"
+    }
+  ],
   "directories": {
     "output": "release/${version}"
   },

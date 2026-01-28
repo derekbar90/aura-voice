@@ -7,6 +7,7 @@
     "dev": "vite",
     "test": "vitest run",
     "build": "tsc && vite build && electron-builder",
+    "release": "tsc && vite build && electron-builder --publish always",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
