@@ -2,9 +2,9 @@
 
 ## Phase 1: Python Engine Verification
 - [x] Task: Set up `pytest` infrastructure and coverage reporting. b1c58ad
-- [ ] Task: Implement health-check tests for `tts_server.py`.
-    - [ ] Write tests for model loading and health endpoint.
-    - [ ] Implement health check logic.
+- [x] Task: Implement health-check tests for `tts_server.py`. b6874b6
+    - [x] Write tests for model loading and health endpoint.
+    - [x] Implement health check logic.
 - [ ] Task: Implement verification tests for `mlx_audio` integration.
     - [ ] Write tests for audio generation functionality.
     - [ ] Ensure `HF_HUB_OFFLINE=1` is correctly utilized in tests.
