@@ -2,12 +2,15 @@ name: Build and Release
 
 on:
   push:
+    branches:
+      - master
     tags:
       - 'v*'
 
 jobs:
   release:
     runs-on: macos-latest
+    if: startsWith(github.ref, 'refs/tags/v')
     
     steps:
       - name: Checkout Code
