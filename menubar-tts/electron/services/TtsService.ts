@@ -41,7 +41,7 @@ export class TtsService {
     const filePrefix = `qwen3_${Date.now()}`
     
     const pythonPath = this.pythonService.resolvePath()
-    const cwd = this.pythonService.getRepoRoot()
+    const cwd = outputDir
     
     const modelId = 'mlx-community/Qwen3-TTS-12Hz-0.6B-Base-6bit'
 
@@ -53,8 +53,6 @@ export class TtsService {
       modelId,
       '--text',
       text,
-      '--output_path',
-      outputDir,
       '--file_prefix',
       filePrefix,
       '--audio_format',
