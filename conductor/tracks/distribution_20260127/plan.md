@@ -1,6 +1,6 @@
 # Implementation Plan: Distribution Readiness
 
-## Phase 1: Automated Distribution (CI/CD)
+## Phase 1: Automated Distribution (CI/CD) [checkpoint: 9067c8d]
 - [x] Task: Create `.github/workflows/release.yml` for macOS builds. e881d9e
 - [x] Task: Configure environment mapping for GitHub Secrets (APPLE_ID, APPLE_ID_PASSWORD, etc.). cf2b61a
 - [x] Task: Implement automated versioning and release creation logic. cf1d375
