@@ -18,7 +18,7 @@
 - [ ] Task: Conductor - User Manual Verification 'Electron Bridge & Service Verification' (Protocol in workflow.md)
 
 ## Phase 3: Packaging Configuration & Verification
-- [ ] Task: Audit and update `electron-builder.json5` for macOS.
+- [x] Task: Audit and update `electron-builder.json5` for macOS. 6f56b7b
     - [ ] Ensure all necessary assets and scripts are included in the bundle.
 - [ ] Task: Configure the bundling of the Python `.venv` or equivalent distribution method.
 - [ ] Task: Create a post-build verification script to check the integrity of the packaged app.
