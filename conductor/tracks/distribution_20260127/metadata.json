@@ -1,8 +1,0 @@
-{
-  "track_id": "distribution_20260127",
-  "type": "feature",
-  "status": "new",
-  "created_at": "2026-01-27T23:30:00Z",
-  "updated_at": "2026-01-27T23:30:00Z",
-  "description": "Distribution Readiness: Implement macOS code signing, notarization, and automated GitHub Releases."
-}
