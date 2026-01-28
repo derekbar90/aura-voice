@@ -20,5 +20,5 @@
 
 ## Phase 4: Conventional Commits & Automated Versioning
 - [x] Task: Install and configure `commitlint` and `husky` for message validation. 219aa69
-- [ ] Task: Update GitHub workflow to use `semantic-release` or equivalent for auto-tagging.
+- [x] Task: Update GitHub workflow to use `semantic-release` or equivalent for auto-tagging. 6e972fe
 - [ ] Task: Conductor - User Manual Verification 'Conventional Commits & Automated Versioning' (Protocol in workflow.md)
