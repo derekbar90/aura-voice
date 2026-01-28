@@ -5,9 +5,9 @@
 - [x] Task: Implement health-check tests for `tts_server.py`. b6874b6
     - [x] Write tests for model loading and health endpoint.
     - [x] Implement health check logic.
-- [ ] Task: Implement verification tests for `mlx_audio` integration.
-    - [ ] Write tests for audio generation functionality.
-    - [ ] Ensure `HF_HUB_OFFLINE=1` is correctly utilized in tests.
+- [x] Task: Implement verification tests for `mlx_audio` integration. 26344de
+    - [x] Write tests for audio generation functionality.
+    - [x] Ensure `HF_HUB_OFFLINE=1` is correctly utilized in tests.
 - [ ] Task: Conductor - User Manual Verification 'Python Engine Verification' (Protocol in workflow.md)
 
 ## Phase 2: Electron Bridge & Service Verification
