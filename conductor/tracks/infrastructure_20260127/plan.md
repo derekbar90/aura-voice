@@ -10,7 +10,7 @@
     - [x] Ensure `HF_HUB_OFFLINE=1` is correctly utilized in tests.
 - [ ] Task: Conductor - User Manual Verification 'Python Engine Verification' (Protocol in workflow.md)
 
-## Phase 2: Electron Bridge & Service Verification
+## Phase 2: Electron Bridge & Service Verification [checkpoint: 55ff5ce]
 - [x] Task: Implement unit tests for `TtsService.ts`. 7adb14b
     - [ ] Write tests for CLI argument generation.
     - [ ] Mock `spawn` to verify environment variables (HF_HUB_OFFLINE, PYTHONPATH).
