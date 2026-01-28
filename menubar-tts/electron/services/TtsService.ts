@@ -68,7 +68,7 @@ export class TtsService {
     if (typeof pitch === 'number') args.push('--pitch', String(pitch))
     if (typeof exaggeration === 'number') args.push('--exaggeration', String(exaggeration))
     if (typeof cfgScale === 'number') args.push('--cfg_scale', String(cfgScale))
-    if (typeof ddpmSteps === 'number') args.push('--ddpm_steps', String(ddpm_steps))
+    if (typeof ddpmSteps === 'number') args.push('--ddpm_steps', String(ddpmSteps))
     if (refAudioPath) args.push('--ref_audio', refAudioPath)
     if (refText) args.push('--ref_text', refText)
 

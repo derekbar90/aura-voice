@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { VoiceService } from '../VoiceService'
 import { promises as fsp } from 'node:fs'
-import path from 'node:path'
 
 vi.mock('node:fs', () => ({
   promises: {

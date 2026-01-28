@@ -2,14 +2,12 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { TtsService } from '../TtsService'
 import { PythonService } from '../PythonService'
 import { spawn } from 'node:child_process'
-import { promises as fsp } from 'node:fs'
-import path from 'node:path'
 
 vi.mock('node:child_process')
 vi.mock('node:fs', () => ({
   promises: {
     mkdir: vi.fn().mockResolvedValue(undefined),
-    readdir: vi.fn().mockImplementation(async (dir) => {
+    readdir: vi.fn().mockImplementation(async () => {
       return ['qwen3_1700000000000.wav']
     }),
     readFile: vi.fn().mockResolvedValue(Buffer.from('fake audio data')),

@@ -119,7 +119,8 @@ function createWindow() {
 
   // Handle permission requests (Microphone, etc.)
   session.defaultSession.setPermissionRequestHandler((_webContents, permission, callback) => {
-    if (permission === 'media' || permission === 'audioCapture') {
+    const allowed: string[] = ['media', 'audioCapture']
+    if (allowed.includes(permission)) {
       return callback(true);
     }
     callback(false);

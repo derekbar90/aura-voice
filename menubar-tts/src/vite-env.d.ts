@@ -24,9 +24,9 @@ interface Window {
       mimeType: string
     }>
     openFile: () => Promise<string | null>
-    saveVoice: (name: string, filePath: string) => Promise<{ id: string; name: string; path: string }>
+    saveVoice: (name: string, filePath: string) => Promise<{ id: string; name: string; path: string; transcript?: string }>
     saveRecording: (name: string, buffer: ArrayBuffer, transcript?: string) => Promise<{ id: string; name: string; path: string; transcript?: string }>
-    listVoices: () => Promise<Array<{ id: string; name: string; path: string }>>
-    deleteVoice: (id: string) => Promise<Array<{ id: string; name: string; path: string }>>
+    listVoices: () => Promise<Array<{ id: string; name: string; path: string; transcript?: string }>>
+    deleteVoice: (id: string) => Promise<Array<{ id: string; name: string; path: string; transcript?: string }>>
   }
 }
