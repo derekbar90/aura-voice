@@ -22,7 +22,7 @@
   ],
   "extraResources": [
     {
-      "from": "./python-engine",
+      "from": "../python-engine",
       "to": "python-engine",
       "filter": ["**/*"]
     }

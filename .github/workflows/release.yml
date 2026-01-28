@@ -35,11 +35,11 @@ jobs:
 
       - name: Prepare Python Engine for Bundling
         run: |
-          mkdir -p menubar-tts/python-engine
-          cp -r Qwen3-TTS-12Hz-0.6B-Base-6bit menubar-tts/python-engine/
-          cp -r .venv menubar-tts/python-engine/
-          cp tts_server.py menubar-tts/python-engine/
-          cp pyproject.toml menubar-tts/python-engine/
+          mkdir -p python-engine
+          cp -r Qwen3-TTS-12Hz-0.6B-Base-6bit python-engine/
+          cp -r .venv python-engine/
+          cp tts_server.py python-engine/
+          cp pyproject.toml python-engine/
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
