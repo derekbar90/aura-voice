@@ -7,10 +7,10 @@ requires-python = ">=3.14"
 dependencies = [
     "einops>=0.8.2",
     "huggingface-hub[hf-xet]>=0.36.0",
-    "mlx-audio>=0.2.9",
+    "mlx-audio>=0.3.0",
     "mlx-lm>=0.29.1",
     "scipy>=1.17.0",
-    "sounddevice>=0.5.5",
+    "sounddevice==0.5.3",
     "soundfile>=0.13.1",
 ]
 
