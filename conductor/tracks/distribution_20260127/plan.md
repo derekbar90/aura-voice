@@ -6,7 +6,7 @@
 - [x] Task: Implement automated versioning and release creation logic. cf1d375
 - [ ] Task: Conductor - User Manual Verification 'Automated Distribution (CI/CD)' (Protocol in workflow.md)
 
-## Phase 2: Code Signing & Notarization (Local)
+## Phase 2: Code Signing & Notarization (Local) [checkpoint: 825f91a]
 - [x] Task: Set up local environment variables for signing (`CSC_LINK`, `CSC_KEY_PASSWORD`). e8125c0
 - [x] Task: Implement notarization script in `menubar-tts/electron/notarize.cjs`. 2e966ef
 - [x] Task: Update `electron-builder.json5` to call the notarization script `afterSign`. da566f2
