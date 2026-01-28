@@ -22,23 +22,11 @@
   ],
   "extraResources": [
     {
-      "from": "../Qwen3-TTS-12Hz-0.6B-Base-6bit",
-      "to": "python-engine/Qwen3-TTS-12Hz-0.6B-Base-6bit",
-      "filter": [
-        "**/*"
-      ]
-    },
-    {
-      "from": "../.venv",
-      "to": "python-engine/.venv",
-      "filter": [
-        "**/*"
-      ]
-    },
-    {
       "from": "..",
       "to": "python-engine",
       "filter": [
+        "Qwen3-TTS-12Hz-0.6B-Base-6bit/**/*",
+        ".venv/**/*",
         "tts_server.py",
         "pyproject.toml"
       ]

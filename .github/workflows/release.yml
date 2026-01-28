@@ -27,6 +27,12 @@ jobs:
       - name: Install Python Dependencies
         run: uv sync
 
+      - name: Create Placeholder Model (CI only)
+        run: |
+          mkdir -p Qwen3-TTS-12Hz-0.6B-Base-6bit
+          echo '{"model_type": "qwen3"}' > Qwen3-TTS-12Hz-0.6B-Base-6bit/config.json
+          touch Qwen3-TTS-12Hz-0.6B-Base-6bit/placeholder.txt
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
