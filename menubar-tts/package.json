@@ -8,6 +8,9 @@
     "test": "vitest run",
     "build": "tsc && vite build && electron-builder",
     "release": "tsc && vite build && electron-builder --publish always",
+    "version:patch": "npm version patch && git add ..",
+    "version:minor": "npm version minor && git add ..",
+    "version:major": "npm version major && git add ..",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
