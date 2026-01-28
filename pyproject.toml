@@ -13,3 +13,27 @@ dependencies = [
     "sounddevice>=0.5.5",
     "soundfile>=0.13.1",
 ]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+addopts = "--cov=. --cov-report=term-missing"
+env = [
+    "HF_HUB_OFFLINE=1",
+]
+
+[tool.coverage.run]
+omit = [
+    "tests/*",
+    "venv/*",
+    ".venv/*",
+    "setup.py",
+]
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28.1",
+    "pytest>=9.0.2",
+    "pytest-cov>=7.0.0",
+    "pytest-env>=1.2.0",
+]
