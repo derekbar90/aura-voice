@@ -17,7 +17,7 @@
 - [x] Task: Implement unit tests for `PythonService.ts` and `VoiceService.ts`. 91ae818
 - [ ] Task: Conductor - User Manual Verification 'Electron Bridge & Service Verification' (Protocol in workflow.md)
 
-## Phase 3: Packaging Configuration & Verification
+## Phase 3: Packaging Configuration & Verification [checkpoint: 7f27faf]
 - [x] Task: Audit and update `electron-builder.json5` for macOS. 6f56b7b
     - [ ] Ensure all necessary assets and scripts are included in the bundle.
 - [x] Task: Configure the bundling of the Python `.venv` or equivalent distribution method. 95d81ea
