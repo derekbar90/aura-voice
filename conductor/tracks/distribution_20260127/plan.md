@@ -15,5 +15,5 @@
 ## Phase 3: App Store Compliance & Final Polish
 - [x] Task: Audit `entitlements.mac.plist` for App Store sandboxing requirements. 3667ec6
 - [x] Task: Verify high-resolution icon assets and metadata. b883935
-- [ ] Task: Conduct a final "Fresh Install" verification from a GitHub Release artifact.
+- [x] Task: Conduct a final "Fresh Install" verification from a GitHub Release artifact. 7a81a27
 - [ ] Task: Conductor - User Manual Verification 'App Store Compliance & Final Polish' (Protocol in workflow.md)
