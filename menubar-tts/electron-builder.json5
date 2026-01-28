@@ -22,14 +22,9 @@
   ],
   "extraResources": [
     {
-      "from": "..",
+      "from": "python-engine",
       "to": "python-engine",
-      "filter": [
-        "Qwen3-TTS-12Hz-0.6B-Base-6bit/**/*",
-        ".venv/**/*",
-        "tts_server.py",
-        "pyproject.toml"
-      ]
+      "filter": ["**/*"]
     }
   ],
   "afterSign": "./electron/notarize.cjs",
