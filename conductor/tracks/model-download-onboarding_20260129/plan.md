@@ -2,7 +2,7 @@
 
 ## Phase 1: Download Orchestration & IPC
 - [x] Task: Define download state and lifecycle events in main process (start, progress, pause, cancel, error) 69bc85d
-- [ ] Task: Add IPC channels for download status + controls (start/pause/cancel/retry)
+- [x] Task: Add IPC channels for download status + controls (start/pause/cancel/retry) ed62e48
 - [ ] Task: Implement download manager integration with model fetch (progress %, bytes, ETA)
 - [ ] Task: Add unit tests for download state transitions and IPC handlers
 - [ ] Task: Conductor - User Manual Verification 'Download Orchestration & IPC' (Protocol in workflow.md)
