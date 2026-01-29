@@ -1,5 +1,5 @@
 type DownloadState = {
-  status: 'idle' | 'downloading' | 'paused' | 'completed' | 'failed' | 'canceled'
+  status: 'idle' | 'downloading' | 'completed' | 'failed' | 'canceled'
   progressPercent: number
   downloadedBytes: number
   totalBytes: number
@@ -27,10 +27,6 @@ export const DownloadStatusLine = ({ state }: { state: DownloadState | null }) =
 
   if (state.status === 'canceled') {
     return <span>Model download canceled</span>
-  }
-
-  if (state.status === 'paused') {
-    return <span>Model download paused at {state.progressPercent}%</span>
   }
 
   const eta = formatEta(state.etaSeconds)

@@ -4,7 +4,6 @@ import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process'
 export type DownloadStatus =
   | 'idle'
   | 'downloading'
-  | 'paused'
   | 'completed'
   | 'failed'
   | 'canceled'
@@ -31,6 +30,7 @@ export class ModelDownloadService extends EventEmitter {
     cwd: string
   }
   private stderrBuffer = ''
+  private stdoutBuffer = ''
 
   constructor() {
     super()
@@ -70,6 +70,7 @@ export class ModelDownloadService extends EventEmitter {
     if (this.activeProcess) return
     this.lastOptions = options
     this.stderrBuffer = ''
+    this.stdoutBuffer = ''
     this.start()
 
     const child = spawn(
@@ -88,23 +89,13 @@ export class ModelDownloadService extends EventEmitter {
     })
     child.on('close', (code) => {
       this.activeProcess = undefined
-      if (code === 0 && this.state.status !== 'failed') this.complete()
-      if (code !== 0) {
+      if (code === 0 && !['failed', 'canceled'].includes(this.state.status)) this.complete()
+      if (code !== 0 && !['canceled', 'completed'].includes(this.state.status)) {
         const trimmed = this.stderrBuffer.trim()
         const detail = trimmed ? trimmed.split('\n').slice(-3).join('\n') : `code ${code}`
         this.fail(`Download failed: ${detail}`)
       }
     })
-  }
-
-  pause() {
-    if (this.state.status !== 'downloading') return
-    this.setState({ status: 'paused' })
-  }
-
-  resume() {
-    if (this.state.status !== 'paused') return
-    this.setState({ status: 'downloading' })
   }
 
   cancel() {
@@ -146,8 +137,11 @@ export class ModelDownloadService extends EventEmitter {
   }
 
   private handleOutput(output: string) {
-    const lines = output.split(/\r?\n/).map((line) => line.trim())
-    for (const line of lines) {
+    this.stdoutBuffer += output
+    const lines = this.stdoutBuffer.split(/\r?\n/)
+    this.stdoutBuffer = lines.pop() ?? ''
+    const trimmedLines = lines.map((line) => line.trim())
+    for (const line of trimmedLines) {
       if (!line.startsWith('MODEL_DOWNLOAD ')) continue
       const payload = line.replace('MODEL_DOWNLOAD ', '')
       try {

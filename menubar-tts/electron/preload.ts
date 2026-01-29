@@ -60,12 +60,6 @@ contextBridge.exposeInMainWorld('tts', {
   startModelDownload() {
     return ipcRenderer.invoke('model:download:start')
   },
-  pauseModelDownload() {
-    return ipcRenderer.invoke('model:download:pause')
-  },
-  resumeModelDownload() {
-    return ipcRenderer.invoke('model:download:resume')
-  },
   cancelModelDownload() {
     return ipcRenderer.invoke('model:download:cancel')
   },

@@ -15,7 +15,7 @@ describe('OnboardingDownloadBanner', () => {
         totalBytes={1000}
         etaSeconds={120}
         currentFile="weights/model.safetensors"
-        onPause={() => undefined}
+        onDismiss={() => undefined}
         onCancel={() => undefined}
       />
     )
@@ -25,21 +25,21 @@ describe('OnboardingDownloadBanner', () => {
     expect(screen.getByText(/320 B/i)).toBeTruthy()
   })
 
-  it('triggers pause handler', () => {
-    const onPause = vi.fn()
+  it('triggers dismiss handler', () => {
+    const onDismiss = vi.fn()
     render(
       <OnboardingDownloadBanner
         status="downloading"
         progressPercent={10}
         downloadedBytes={100}
         totalBytes={1000}
-        onPause={onPause}
+        onDismiss={onDismiss}
         onCancel={() => undefined}
       />
     )
 
-    fireEvent.click(screen.getByRole('button', { name: /Pause/i }))
-    expect(onPause).toHaveBeenCalled()
+    fireEvent.click(screen.getByRole('button', { name: /Hide/i }))
+    expect(onDismiss).toHaveBeenCalled()
   })
 
   it('shows retry state when failed', () => {
@@ -49,7 +49,7 @@ describe('OnboardingDownloadBanner', () => {
         progressPercent={0}
         downloadedBytes={0}
         totalBytes={0}
-        onPause={() => undefined}
+        onDismiss={() => undefined}
         onCancel={() => undefined}
         onRetry={() => undefined}
         errorMessage="Network error"

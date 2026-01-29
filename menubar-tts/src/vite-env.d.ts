@@ -25,7 +25,7 @@ interface Window {
     }>
     onStatus: (callback: (status: string) => void) => () => void
     onModelDownloadStatus: (callback: (state: {
-      status: 'idle' | 'downloading' | 'paused' | 'completed' | 'failed' | 'canceled'
+      status: 'idle' | 'downloading' | 'completed' | 'failed' | 'canceled'
       progressPercent: number
       downloadedBytes: number
       totalBytes: number
@@ -36,8 +36,6 @@ interface Window {
       error?: string
     }) => void) => () => void
     startModelDownload: () => Promise<void>
-    pauseModelDownload: () => Promise<void>
-    resumeModelDownload: () => Promise<void>
     cancelModelDownload: () => Promise<void>
     retryModelDownload: () => Promise<void>
     openFile: () => Promise<string | null>

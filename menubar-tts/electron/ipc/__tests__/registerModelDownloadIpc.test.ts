@@ -19,8 +19,6 @@ describe('registerModelDownloadIpc', () => {
     expect(channels).toEqual(
       expect.arrayContaining([
         'model:download:start',
-        'model:download:pause',
-        'model:download:resume',
         'model:download:cancel',
         'model:download:retry',
       ])

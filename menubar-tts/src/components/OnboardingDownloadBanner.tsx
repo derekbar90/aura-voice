@@ -1,4 +1,4 @@
-type DownloadStatus = 'idle' | 'downloading' | 'paused' | 'completed' | 'failed' | 'canceled'
+type DownloadStatus = 'idle' | 'downloading' | 'completed' | 'failed' | 'canceled'
 
 type Props = {
   status: DownloadStatus
@@ -9,7 +9,7 @@ type Props = {
   currentFile?: string
   currentFileBytes?: number
   currentFileTotal?: number
-  onPause: () => void
+  onDismiss: () => void
   onCancel: () => void
   onRetry?: () => void
   errorMessage?: string
@@ -40,13 +40,12 @@ export const OnboardingDownloadBanner = ({
   currentFile,
   currentFileBytes,
   currentFileTotal,
-  onPause,
+  onDismiss,
   onCancel,
   onRetry,
   errorMessage,
 }: Props) => {
   const isFailed = status === 'failed'
-  const isPaused = status === 'paused'
   const pct = Math.min(Math.max(progressPercent, 0), 100)
   const subtitle = errorMessage || 'Download failed. Please retry.'
   const fileLabel = currentFile ? currentFile.split('/').pop() : null
@@ -75,29 +74,40 @@ export const OnboardingDownloadBanner = ({
           </div>
           <div className="flex items-center gap-2">
             {isFailed ? (
-              <button
-                type="button"
-                onClick={onRetry}
-                className="px-3 py-1.5 rounded-full text-[11px] font-semibold bg-[#4A90E2]/20 text-[#9dc0ff] hover:bg-[#4A90E2]/30 transition"
-              >
-                Retry
-              </button>
+              <>
+                <button
+                  type="button"
+                  onClick={onRetry}
+                  className="px-3 py-1.5 rounded-full text-[11px] font-semibold bg-[#4A90E2]/20 text-[#9dc0ff] hover:bg-[#4A90E2]/30 transition"
+                >
+                  Retry
+                </button>
+                <button
+                  type="button"
+                  onClick={onDismiss}
+                  className="px-3 py-1.5 rounded-full text-[11px] font-semibold bg-white/10 hover:bg-white/20 transition"
+                >
+                  Dismiss
+                </button>
+              </>
             ) : (
-              <button
-                type="button"
-                onClick={onPause}
-                className="px-3 py-1.5 rounded-full text-[11px] font-semibold bg-white/10 hover:bg-white/20 transition"
-              >
-                {isPaused ? 'Resume' : 'Pause'}
-              </button>
+              <>
+                <button
+                  type="button"
+                  onClick={onDismiss}
+                  className="px-3 py-1.5 rounded-full text-[11px] font-semibold bg-white/10 hover:bg-white/20 transition"
+                >
+                  Hide
+                </button>
+                <button
+                  type="button"
+                  onClick={onCancel}
+                  className="px-3 py-1.5 rounded-full text-[11px] font-semibold text-red-200 bg-red-500/10 hover:bg-red-500/20 transition"
+                >
+                  Cancel
+                </button>
+              </>
             )}
-            <button
-              type="button"
-              onClick={onCancel}
-              className="px-3 py-1.5 rounded-full text-[11px] font-semibold text-red-200 bg-red-500/10 hover:bg-red-500/20 transition"
-            >
-              Cancel
-            </button>
           </div>
         </div>
 

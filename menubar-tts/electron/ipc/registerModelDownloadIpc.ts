@@ -15,8 +15,6 @@ export const registerModelDownloadIpc = (
   getOptions: () => DownloadOptions
 ) => {
   ipcMain.handle('model:download:start', () => service.startDownload(getOptions()))
-  ipcMain.handle('model:download:pause', () => service.pause())
-  ipcMain.handle('model:download:resume', () => service.resume())
   ipcMain.handle('model:download:cancel', () => service.cancel())
   ipcMain.handle('model:download:retry', () => service.retry())
 

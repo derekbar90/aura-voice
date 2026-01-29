@@ -27,7 +27,6 @@ describe('App', () => {
         return () => undefined
       }),
       startModelDownload: vi.fn(),
-      pauseModelDownload: vi.fn(),
       cancelModelDownload: vi.fn(),
       retryModelDownload: vi.fn(),
       openFile: vi.fn(),

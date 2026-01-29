@@ -1,11 +1,13 @@
 import argparse
 import json
 import os
+import threading
 import time
 
 from tqdm.auto import tqdm as base_tqdm
 
-from huggingface_hub import HfApi, hf_hub_download
+from huggingface_hub import HfApi, hf_hub_download, constants
+from huggingface_hub.file_download import repo_folder_name
 
 try:
     from huggingface_hub.hf_api import RepoFile
@@ -82,6 +84,10 @@ def main() -> None:
     repo_id = args.model
     revision = args.revision
 
+    cache_dir = os.environ.get("HF_HUB_CACHE", constants.HF_HUB_CACHE)
+    repo_folder = repo_folder_name(repo_id=repo_id, repo_type="model")
+    blobs_dir = os.path.join(cache_dir, repo_folder, "blobs")
+
     entries = api.list_repo_tree(repo_id, recursive=True, revision=revision)
     files = []
     for entry in entries:
@@ -105,7 +111,69 @@ def main() -> None:
         ModelTqdm.current_file_total = entry.size or 0
 
         emit({"event": "file", "path": entry.path, "size": entry.size or 0})
-        hf_hub_download(repo_id, entry.path, revision=revision, tqdm_class=ModelTqdm)
+
+        stop_event = threading.Event()
+        last_size = -1
+
+        blob_id = getattr(entry, "blob_id", None)
+        blob_path = os.path.join(blobs_dir, blob_id) if blob_id else None
+        incomplete_path = f"{blob_path}.incomplete" if blob_path else None
+
+        def find_latest_incomplete() -> str | None:
+            if not blobs_dir or not os.path.isdir(blobs_dir):
+                return None
+            try:
+                candidates = [
+                    os.path.join(blobs_dir, name)
+                    for name in os.listdir(blobs_dir)
+                    if name.endswith(".incomplete")
+                ]
+            except OSError:
+                return None
+            if not candidates:
+                return None
+            return max(candidates, key=lambda path: os.path.getmtime(path))
+
+        def poll_progress():
+            nonlocal last_size
+            while not stop_event.is_set():
+                size = None
+                fallback_incomplete = None
+                if incomplete_path is None and blob_path is None:
+                    fallback_incomplete = find_latest_incomplete()
+
+                for path in (incomplete_path, fallback_incomplete, blob_path):
+                    if path and os.path.exists(path):
+                        try:
+                            size = os.path.getsize(path)
+                            break
+                        except OSError:
+                            size = None
+                if size is not None and size != last_size:
+                    last_size = size
+                    emit(
+                        {
+                            "percent": int((downloaded + size) / total_bytes * 100)
+                            if total_bytes
+                            else 0,
+                            "downloadedBytes": int(downloaded + size),
+                            "totalBytes": int(total_bytes),
+                            "currentFile": entry.path,
+                            "currentFileBytes": int(size),
+                            "currentFileTotal": int(entry.size or 0),
+                        }
+                    )
+                stop_event.wait(0.5)
+
+        poller = threading.Thread(target=poll_progress, daemon=True)
+        poller.start()
+        try:
+            hf_hub_download(
+                repo_id, entry.path, revision=revision, tqdm_class=ModelTqdm
+            )
+        finally:
+            stop_event.set()
+            poller.join(timeout=1)
         downloaded += entry.size or 0
 
     emit({"event": "complete"})

@@ -33,8 +33,9 @@ function App() {
   const [isGenerating, setIsGenerating] = useState(false)
   const [ttsStatus, setTtsStatus] = useState('')
   const [downloadRequested, setDownloadRequested] = useState(false)
+  const [isDownloadBannerDismissed, setIsDownloadBannerDismissed] = useState(false)
   const [modelDownloadState, setModelDownloadState] = useState<{
-    status: 'idle' | 'downloading' | 'paused' | 'completed' | 'failed' | 'canceled'
+    status: 'idle' | 'downloading' | 'completed' | 'failed' | 'canceled'
     progressPercent: number
     downloadedBytes: number
     totalBytes: number
@@ -114,6 +115,12 @@ function App() {
       if (typeof unsubscribe === 'function') unsubscribe()
     }
   }, [bridgeReady])
+
+  useEffect(() => {
+    if (modelDownloadState?.status === 'failed') {
+      setIsDownloadBannerDismissed(false)
+    }
+  }, [modelDownloadState?.status])
 
   // Auto-play when audioUrl changes
   useEffect(() => {
@@ -221,15 +228,6 @@ function App() {
     return `${m}:${s.toString().padStart(2, '0')}`
   }
 
-  const handlePauseDownload = () => {
-    if (!window.tts) return
-    if (modelDownloadState?.status === 'paused') {
-      window.tts.resumeModelDownload?.()
-      return
-    }
-    window.tts.pauseModelDownload?.()
-  }
-
   const handleCancelDownload = () => {
     if (!window.tts) return
     window.tts.cancelModelDownload?.()
@@ -238,6 +236,10 @@ function App() {
   const handleRetryDownload = () => {
     if (!window.tts) return
     window.tts.retryModelDownload?.()
+  }
+
+  const handleDismissDownloadBanner = () => {
+    setIsDownloadBannerDismissed(true)
   }
 
   const resolvedDownloadState = modelDownloadState ?? {
@@ -250,7 +252,10 @@ function App() {
     currentFileTotal: undefined,
   }
 
-  const showDownloadBanner = downloadRequested && !['completed', 'canceled'].includes(resolvedDownloadState.status)
+  const showDownloadBanner =
+    downloadRequested &&
+    !['completed', 'canceled'].includes(resolvedDownloadState.status) &&
+    !isDownloadBannerDismissed
 
   /* c8 ignore start */
   return (
@@ -267,16 +272,16 @@ function App() {
               status={resolvedDownloadState.status}
               progressPercent={resolvedDownloadState.progressPercent}
               downloadedBytes={resolvedDownloadState.downloadedBytes}
-            totalBytes={resolvedDownloadState.totalBytes}
-            etaSeconds={resolvedDownloadState.etaSeconds}
-            currentFile={resolvedDownloadState.currentFile}
-            currentFileBytes={resolvedDownloadState.currentFileBytes}
-            currentFileTotal={resolvedDownloadState.currentFileTotal}
-            onPause={handlePauseDownload}
-            onCancel={handleCancelDownload}
-            onRetry={handleRetryDownload}
-            errorMessage={resolvedDownloadState.error}
-          />
+              totalBytes={resolvedDownloadState.totalBytes}
+              etaSeconds={resolvedDownloadState.etaSeconds}
+              currentFile={resolvedDownloadState.currentFile}
+              currentFileBytes={resolvedDownloadState.currentFileBytes}
+              currentFileTotal={resolvedDownloadState.currentFileTotal}
+              onDismiss={handleDismissDownloadBanner}
+              onCancel={handleCancelDownload}
+              onRetry={handleRetryDownload}
+              errorMessage={resolvedDownloadState.error}
+            />
           </div>
         )}
         

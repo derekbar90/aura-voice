@@ -13,12 +13,6 @@ describe('ModelDownloadService', () => {
     service.start()
     expect(service.state.status).toBe('downloading')
 
-    service.pause()
-    expect(service.state.status).toBe('paused')
-
-    service.resume()
-    expect(service.state.status).toBe('downloading')
-
     service.cancel()
     expect(service.state.status).toBe('canceled')
   })
