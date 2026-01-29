@@ -21,6 +21,13 @@ export type DownloadState = {
 export class ModelDownloadService extends EventEmitter {
   public state: DownloadState
   private activeProcess?: ChildProcessWithoutNullStreams
+  private lastOptions?: {
+    pythonPath: string
+    scriptPath: string
+    modelId: string
+    cwd: string
+  }
+  private stderrBuffer = ''
 
   constructor() {
     super()
@@ -44,7 +51,11 @@ export class ModelDownloadService extends EventEmitter {
       this.activeProcess.kill('SIGTERM')
       this.activeProcess = undefined
     }
-    this.start()
+    if (this.lastOptions) {
+      this.startDownload(this.lastOptions)
+    } else {
+      this.start()
+    }
   }
 
   startDownload(options: {
@@ -54,6 +65,8 @@ export class ModelDownloadService extends EventEmitter {
     cwd: string
   }) {
     if (this.activeProcess) return
+    this.lastOptions = options
+    this.stderrBuffer = ''
     this.start()
 
     const child = spawn(
@@ -65,12 +78,19 @@ export class ModelDownloadService extends EventEmitter {
 
     child.stdout.on('data', (data) => this.handleOutput(data.toString()))
     child.stderr.on('data', (data) => {
-      this.emit('stderr', data.toString())
+      const text = data.toString()
+      this.stderrBuffer += text
+      console.error('[ModelDownload stderr]:', text)
+      this.emit('stderr', text)
     })
     child.on('close', (code) => {
       this.activeProcess = undefined
       if (code === 0 && this.state.status !== 'failed') this.complete()
-      if (code !== 0) this.fail(`Download process exited with code ${code}`)
+      if (code !== 0) {
+        const trimmed = this.stderrBuffer.trim()
+        const detail = trimmed ? trimmed.split('\n').slice(-3).join('\n') : `code ${code}`
+        this.fail(`Download failed: ${detail}`)
+      }
     })
   }
 
