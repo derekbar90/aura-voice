@@ -14,12 +14,9 @@ describe('OnboardingDownloadOverlay', () => {
         etaSeconds={90}
         onPause={() => undefined}
         onCancel={() => undefined}
-      >
-        <div>Main content</div>
-      </OnboardingDownloadOverlay>
+      />
     )
 
-    expect(screen.getByText('Main content')).toBeTruthy()
     expect(screen.getByText(/keep exploring/i)).toBeTruthy()
   })
 
@@ -34,9 +31,7 @@ describe('OnboardingDownloadOverlay', () => {
         onCancel={() => undefined}
         onRetry={() => undefined}
         errorMessage="Network error"
-      >
-        <div>Main content</div>
-      </OnboardingDownloadOverlay>
+      />
     )
 
     expect(screen.getByRole('button', { name: /Retry/i })).toBeTruthy()

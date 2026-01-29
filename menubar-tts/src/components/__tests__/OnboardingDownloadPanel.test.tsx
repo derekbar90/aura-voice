@@ -1,7 +1,9 @@
 // @vitest-environment jsdom
-import { describe, it, expect } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { describe, it, expect, vi, afterEach } from 'vitest'
+import { render, screen, fireEvent, cleanup } from '@testing-library/react'
 import { OnboardingDownloadPanel } from '../OnboardingDownloadPanel'
+
+afterEach(() => cleanup())
 
 describe('OnboardingDownloadPanel', () => {
   it('renders progress, eta, and controls', () => {
@@ -55,5 +57,22 @@ describe('OnboardingDownloadPanel', () => {
     const label = screen.getByText('Paused')
     expect(label).toBeTruthy()
     expect(label.getAttribute('aria-live')).toBe('polite')
+  })
+
+  it('invokes pause handler when clicking Pause', () => {
+    const onPause = vi.fn()
+    const { getByRole } = render(
+      <OnboardingDownloadPanel
+        status="downloading"
+        progressPercent={20}
+        downloadedBytes={200}
+        totalBytes={1000}
+        onPause={onPause}
+        onCancel={() => undefined}
+      />
+    )
+
+    fireEvent.click(getByRole('button', { name: /Pause/i }))
+    expect(onPause).toHaveBeenCalled()
   })
 })

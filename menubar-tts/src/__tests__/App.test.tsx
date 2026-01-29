@@ -19,14 +19,17 @@ describe('App', () => {
       onStatus: vi.fn().mockReturnValue(() => undefined),
       onModelDownloadStatus: vi.fn((callback) => {
         callback({
-          status: 'downloading',
-          progressPercent: 10,
-          downloadedBytes: 100,
-          totalBytes: 1000,
-          etaSeconds: 120,
+          status: 'idle',
+          progressPercent: 0,
+          downloadedBytes: 0,
+          totalBytes: 0,
         })
         return () => undefined
       }),
+      startModelDownload: vi.fn(),
+      pauseModelDownload: vi.fn(),
+      cancelModelDownload: vi.fn(),
+      retryModelDownload: vi.fn(),
       openFile: vi.fn(),
       saveVoice: vi.fn(),
       saveRecording: vi.fn(),
@@ -39,6 +42,6 @@ describe('App', () => {
     render(<App />)
 
     expect(screen.getByRole('button', { name: /Speak Selection/i })).toBeTruthy()
-    expect(await screen.findByText(/Model download 10%/i)).toBeTruthy()
+    expect(window.tts.startModelDownload).toHaveBeenCalled()
   })
 })
