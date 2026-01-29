@@ -52,6 +52,11 @@ contextBridge.exposeInMainWorld('tts', {
     ipcRenderer.on('tts:status', subscription)
     return () => ipcRenderer.off('tts:status', subscription)
   },
+  onModelDownloadStatus(callback: (state: any) => void) {
+    const subscription = (_event: any, state: any) => callback(state)
+    ipcRenderer.on('model:download:status', subscription)
+    return () => ipcRenderer.off('model:download:status', subscription)
+  },
   openFile() {
     return ipcRenderer.invoke('dialog:openFile')
   },

@@ -24,6 +24,14 @@ interface Window {
       mimeType: string
     }>
     onStatus: (callback: (status: string) => void) => () => void
+    onModelDownloadStatus: (callback: (state: {
+      status: 'idle' | 'downloading' | 'paused' | 'completed' | 'failed' | 'canceled'
+      progressPercent: number
+      downloadedBytes: number
+      totalBytes: number
+      etaSeconds?: number
+      error?: string
+    }) => void) => () => void
     openFile: () => Promise<string | null>
     saveVoice: (name: string, filePath: string) => Promise<{ id: string; name: string; path: string; transcript?: string }>
     saveRecording: (name: string, buffer: ArrayBuffer, transcript?: string) => Promise<{ id: string; name: string; path: string; transcript?: string }>

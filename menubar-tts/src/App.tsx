@@ -1,5 +1,6 @@
 import { useState, useRef, useMemo, useEffect } from 'react'
 import { VoiceCloneModal } from './components/VoiceCloneModal'
+import { DownloadStatusLine } from './components/DownloadStatusLine'
 import { useAudioVisualizer } from './hooks/useAudioVisualizer'
 
 type VoiceOption = {
@@ -29,6 +30,14 @@ function App() {
   const [audioUrl, setAudioUrl] = useState('')
   const [isGenerating, setIsGenerating] = useState(false)
   const [ttsStatus, setTtsStatus] = useState('')
+  const [modelDownloadState, setModelDownloadState] = useState<{
+    status: 'idle' | 'downloading' | 'paused' | 'completed' | 'failed' | 'canceled'
+    progressPercent: number
+    downloadedBytes: number
+    totalBytes: number
+    etaSeconds?: number
+    error?: string
+  } | null>(null)
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
@@ -73,6 +82,17 @@ function App() {
     if (typeof window.tts?.onStatus !== 'function') return
     const unsubscribe = window.tts.onStatus((status: string) => {
       setTtsStatus(status)
+    })
+    return () => {
+      if (typeof unsubscribe === 'function') unsubscribe()
+    }
+  }, [bridgeReady])
+
+  useEffect(() => {
+    if (!bridgeReady) return
+    if (typeof window.tts?.onModelDownloadStatus !== 'function') return
+    const unsubscribe = window.tts.onModelDownloadStatus((state) => {
+      setModelDownloadState(state)
     })
     return () => {
       if (typeof unsubscribe === 'function') unsubscribe()
@@ -400,6 +420,11 @@ function App() {
         
         {/* Progress & Action */}
         <div className="flex items-center gap-4 shrink-0 justify-end min-w-0">
+            {modelDownloadState && modelDownloadState.status !== 'idle' && (
+              <div className="hidden sm:block text-[10px] text-gray-400 font-mono truncate max-w-[260px]" title="Model download status">
+                <DownloadStatusLine state={modelDownloadState} />
+              </div>
+            )}
             {isGenerating && ttsStatus && (
               <div className="hidden sm:block text-[10px] text-gray-400 font-mono truncate max-w-[220px]" title={ttsStatus}>
                 {ttsStatus}
