@@ -22,4 +22,24 @@ describe('OnboardingDownloadOverlay', () => {
     expect(screen.getByText('Main content')).toBeTruthy()
     expect(screen.getByText(/keep exploring/i)).toBeTruthy()
   })
+
+  it('shows a blocking retry state when download fails', () => {
+    render(
+      <OnboardingDownloadOverlay
+        status="failed"
+        progressPercent={0}
+        downloadedBytes={0}
+        totalBytes={0}
+        onPause={() => undefined}
+        onCancel={() => undefined}
+        onRetry={() => undefined}
+        errorMessage="Network error"
+      >
+        <div>Main content</div>
+      </OnboardingDownloadOverlay>
+    )
+
+    expect(screen.getByRole('button', { name: /Retry/i })).toBeTruthy()
+    expect(screen.getByText(/Network error/i)).toBeTruthy()
+  })
 })
