@@ -9,7 +9,7 @@
 
 ## Phase 2: Onboarding UI + Footer Status
 - [x] Task: Build onboarding download screen with progress, ETA, "why" copy, pause/cancel c50586a
-- [ ] Task: Allow app exploration during onboarding while download runs
+- [x] Task: Allow app exploration during onboarding while download runs ee6bc58
 - [ ] Task: Implement blocking error state with Retry on failure
 - [ ] Task: Surface download status in main footer status line
 - [ ] Task: Add UI tests / component tests for onboarding states
