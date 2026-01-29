@@ -1,6 +1,6 @@
 # Implementation Plan: Model Download Onboarding & Progress UX
 
-## Phase 1: Download Orchestration & IPC
+## Phase 1: Download Orchestration & IPC [checkpoint: 7364b16]
 - [x] Task: Define download state and lifecycle events in main process (start, progress, pause, cancel, error) 69bc85d
 - [x] Task: Add IPC channels for download status + controls (start/pause/cancel/retry) ed62e48
 - [x] Task: Implement download manager integration with model fetch (progress %, bytes, ETA) c01bb3c
