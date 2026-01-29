@@ -9,7 +9,7 @@
       "provider": "github",
       "owner": "derekbar90",
       "repo": "aura-voice",
-      "releaseType": "draft"
+      "releaseType": "release"
     }
   ],
   "directories": {
