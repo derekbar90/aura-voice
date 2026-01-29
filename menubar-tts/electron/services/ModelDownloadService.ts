@@ -1,4 +1,5 @@
 import { EventEmitter } from 'node:events'
+import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process'
 
 export type DownloadStatus =
   | 'idle'
@@ -19,6 +20,7 @@ export type DownloadState = {
 
 export class ModelDownloadService extends EventEmitter {
   public state: DownloadState
+  private activeProcess?: ChildProcessWithoutNullStreams
 
   constructor() {
     super()
@@ -37,6 +39,33 @@ export class ModelDownloadService extends EventEmitter {
     })
   }
 
+  startDownload(options: {
+    pythonPath: string
+    scriptPath: string
+    modelId: string
+    cwd: string
+  }) {
+    if (this.activeProcess) return
+    this.start()
+
+    const child = spawn(
+      options.pythonPath,
+      [options.scriptPath, '--model', options.modelId],
+      { cwd: options.cwd, env: process.env }
+    )
+    this.activeProcess = child
+
+    child.stdout.on('data', (data) => this.handleOutput(data.toString()))
+    child.stderr.on('data', (data) => {
+      this.emit('stderr', data.toString())
+    })
+    child.on('close', (code) => {
+      this.activeProcess = undefined
+      if (code === 0 && this.state.status !== 'failed') this.complete()
+      if (code !== 0) this.fail(`Download process exited with code ${code}`)
+    })
+  }
+
   pause() {
     if (this.state.status !== 'downloading') return
     this.setState({ status: 'paused' })
@@ -49,6 +78,10 @@ export class ModelDownloadService extends EventEmitter {
 
   cancel() {
     if (this.state.status === 'completed') return
+    if (this.activeProcess && !this.activeProcess.killed) {
+      this.activeProcess.kill('SIGTERM')
+      this.activeProcess = undefined
+    }
     this.setState({ status: 'canceled' })
   }
 
@@ -73,6 +106,39 @@ export class ModelDownloadService extends EventEmitter {
       totalBytes: progress.totalBytes,
       etaSeconds: progress.etaSeconds,
     })
+  }
+
+  private handleOutput(output: string) {
+    const lines = output.split(/\r?\n/).map((line) => line.trim())
+    for (const line of lines) {
+      if (!line.startsWith('MODEL_DOWNLOAD ')) continue
+      const payload = line.replace('MODEL_DOWNLOAD ', '')
+      try {
+        const data = JSON.parse(payload)
+        if (data.event === 'start') {
+          this.updateProgress({
+            percent: 0,
+            downloadedBytes: 0,
+            totalBytes: data.totalBytes ?? 0,
+          })
+          continue
+        }
+        if (data.event === 'complete') {
+          this.complete()
+          continue
+        }
+        if (typeof data.percent === 'number') {
+          this.updateProgress({
+            percent: data.percent,
+            downloadedBytes: data.downloadedBytes ?? 0,
+            totalBytes: data.totalBytes ?? 0,
+            etaSeconds: data.etaSeconds,
+          })
+        }
+      } catch {
+        this.emit('stderr', line)
+      }
+    }
   }
 
   private setState(next: Partial<DownloadState>) {

@@ -1,5 +1,8 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { ModelDownloadService } from '../ModelDownloadService'
+import { spawn } from 'node:child_process'
+
+vi.mock('node:child_process')
 
 describe('ModelDownloadService', () => {
   it('transitions through core lifecycle states', () => {
@@ -32,5 +35,41 @@ describe('ModelDownloadService', () => {
     next.start()
     next.complete()
     expect(next.state.status).toBe('completed')
+  })
+
+  it('spawns the model download helper and updates progress', () => {
+    const stdoutHandlers: Array<(data: Buffer) => void> = []
+    const mockChild = {
+      stdout: { on: vi.fn((_event, handler) => stdoutHandlers.push(handler)) },
+      stderr: { on: vi.fn() },
+      on: vi.fn(),
+    }
+    vi.mocked(spawn).mockReturnValue(mockChild as any)
+
+    const service = new ModelDownloadService()
+    service.startDownload({
+      pythonPath: '/mock/python',
+      scriptPath: '/mock/script.py',
+      modelId: 'mlx-community/Qwen3-TTS-12Hz-0.6B-Base-6bit',
+      cwd: '/mock/repo',
+    })
+
+    const payload = {
+      percent: 40,
+      downloadedBytes: 400,
+      totalBytes: 1000,
+      etaSeconds: 12,
+    }
+    for (const handler of stdoutHandlers) {
+      handler(Buffer.from(`MODEL_DOWNLOAD ${JSON.stringify(payload)}\n`))
+    }
+
+    expect(spawn).toHaveBeenCalledWith(
+      '/mock/python',
+      ['/mock/script.py', '--model', 'mlx-community/Qwen3-TTS-12Hz-0.6B-Base-6bit'],
+      expect.objectContaining({ cwd: '/mock/repo', env: expect.any(Object) })
+    )
+    expect(service.state.progressPercent).toBe(40)
+    expect(service.state.totalBytes).toBe(1000)
   })
 })
