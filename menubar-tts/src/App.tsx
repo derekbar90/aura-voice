@@ -1,7 +1,7 @@
 /* c8 ignore file */
 import { useState, useRef, useMemo, useEffect } from 'react'
 import { VoiceCloneModal } from './components/VoiceCloneModal'
-import { OnboardingDownloadOverlay } from './components/OnboardingDownloadOverlay'
+import { OnboardingDownloadBanner } from './components/OnboardingDownloadBanner'
 import { DownloadStatusLine } from './components/DownloadStatusLine'
 import { useAudioVisualizer } from './hooks/useAudioVisualizer'
 
@@ -246,7 +246,7 @@ function App() {
     currentFile: undefined,
   }
 
-  const showDownloadOverlay = downloadRequested && resolvedDownloadState.status !== 'completed'
+  const showDownloadBanner = downloadRequested && !['completed', 'canceled'].includes(resolvedDownloadState.status)
 
   /* c8 ignore start */
   return (
@@ -257,19 +257,21 @@ function App() {
 
       {/* Main Content */}
       <main className="flex-1 relative flex flex-col items-center justify-start overflow-hidden">
-        {showDownloadOverlay && (
-          <OnboardingDownloadOverlay
-            status={resolvedDownloadState.status}
-            progressPercent={resolvedDownloadState.progressPercent}
-            downloadedBytes={resolvedDownloadState.downloadedBytes}
-            totalBytes={resolvedDownloadState.totalBytes}
-            etaSeconds={resolvedDownloadState.etaSeconds}
-            currentFile={resolvedDownloadState.currentFile}
-            onPause={handlePauseDownload}
-            onCancel={handleCancelDownload}
-            onRetry={handleRetryDownload}
-            errorMessage={resolvedDownloadState.error}
-          />
+        {showDownloadBanner && (
+          <div className="w-full flex justify-center pt-20">
+            <OnboardingDownloadBanner
+              status={resolvedDownloadState.status}
+              progressPercent={resolvedDownloadState.progressPercent}
+              downloadedBytes={resolvedDownloadState.downloadedBytes}
+              totalBytes={resolvedDownloadState.totalBytes}
+              etaSeconds={resolvedDownloadState.etaSeconds}
+              currentFile={resolvedDownloadState.currentFile}
+              onPause={handlePauseDownload}
+              onCancel={handleCancelDownload}
+              onRetry={handleRetryDownload}
+              errorMessage={resolvedDownloadState.error}
+            />
+          </div>
         )}
         
         {/* Floating Toolbar */}
