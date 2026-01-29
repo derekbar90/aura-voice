@@ -8,7 +8,7 @@
 - [ ] Task: Conductor - User Manual Verification 'Download Orchestration & IPC' (Protocol in workflow.md)
 
 ## Phase 2: Onboarding UI + Footer Status
-- [ ] Task: Build onboarding download screen with progress, ETA, "why" copy, pause/cancel
+- [x] Task: Build onboarding download screen with progress, ETA, "why" copy, pause/cancel c50586a
 - [ ] Task: Allow app exploration during onboarding while download runs
 - [ ] Task: Implement blocking error state with Retry on failure
 - [ ] Task: Surface download status in main footer status line
