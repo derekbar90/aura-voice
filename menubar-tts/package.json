@@ -1,6 +1,6 @@
 {
   "name": "menubar-tts",
-  "productName": "Qwen3 Voice Studio",
+  "productName": "AuraVoice",
   "description": "Local-first, high-performance Text-to-Speech for macOS powered by Qwen3 and MLX.",
   "author": "Derek Barrera",
   "private": true,

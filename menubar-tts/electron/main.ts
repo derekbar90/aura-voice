@@ -188,13 +188,13 @@ function createTray() {
   image.setTemplateImage(true)
 
   tray = new Tray(image)
-  tray.setToolTip('Qwen3 Voice Studio')
+  tray.setToolTip('AuraVoice')
   tray.on('click', toggleWindow)
   console.info('Tray created')
 
   const menu = Menu.buildFromTemplate([
     {
-      label: 'Show Qwen3 Voice Studio',
+      label: 'Show AuraVoice',
       click: () => toggleWindow(),
     },
     { type: 'separator' },

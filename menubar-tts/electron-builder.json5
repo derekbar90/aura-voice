@@ -3,7 +3,7 @@
   "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
   "appId": "com.derekbarrera.readmethis",
   "asar": true,
-  "productName": "Qwen3 Voice Studio",
+  "productName": "AuraVoice",
   "publish": [
     {
       "provider": "github",

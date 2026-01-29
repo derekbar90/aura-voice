@@ -1,7 +1,7 @@
 # Specification: Distribution Readiness
 
 ## Overview
-This track focuses on preparing "Qwen3 Voice Studio" for public distribution. It covers the essential security requirements for macOS (Code Signing and Notarization) and the automation required for seamless GitHub Releases and eventual Mac App Store submission.
+This track focuses on preparing "AuraVoice" for public distribution. It covers the essential security requirements for macOS (Code Signing and Notarization) and the automation required for seamless GitHub Releases and eventual Mac App Store submission.
 
 ## Goals
 - Implement secure macOS code signing using Apple Developer certificates.
