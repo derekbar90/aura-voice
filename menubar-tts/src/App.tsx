@@ -39,6 +39,7 @@ function App() {
     downloadedBytes: number
     totalBytes: number
     etaSeconds?: number
+    currentFile?: string
     error?: string
   } | null>(null)
   const hasRequestedDownload = useRef(false)
@@ -242,6 +243,7 @@ function App() {
     progressPercent: 0,
     downloadedBytes: 0,
     totalBytes: 0,
+    currentFile: undefined,
   }
 
   const showDownloadOverlay = downloadRequested && resolvedDownloadState.status !== 'completed'
@@ -262,6 +264,7 @@ function App() {
             downloadedBytes={resolvedDownloadState.downloadedBytes}
             totalBytes={resolvedDownloadState.totalBytes}
             etaSeconds={resolvedDownloadState.etaSeconds}
+            currentFile={resolvedDownloadState.currentFile}
             onPause={handlePauseDownload}
             onCancel={handleCancelDownload}
             onRetry={handleRetryDownload}

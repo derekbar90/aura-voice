@@ -6,6 +6,7 @@ type Props = {
   downloadedBytes: number
   totalBytes: number
   etaSeconds?: number
+  currentFile?: string
   onPause: () => void
   onCancel: () => void
   onRetry?: () => void
@@ -18,6 +19,7 @@ export const OnboardingDownloadOverlay = ({
   downloadedBytes,
   totalBytes,
   etaSeconds,
+  currentFile,
   onPause,
   onCancel,
   onRetry,
@@ -35,6 +37,7 @@ export const OnboardingDownloadOverlay = ({
       downloadedBytes={downloadedBytes}
       totalBytes={totalBytes}
       etaSeconds={etaSeconds}
+      currentFile={currentFile}
       onPause={onPause}
       onCancel={onCancel}
       onRetry={onRetry}

@@ -6,6 +6,7 @@ type Props = {
   downloadedBytes: number
   totalBytes: number
   etaSeconds?: number
+  currentFile?: string
   onPause: () => void
   onCancel: () => void
   onRetry?: () => void
@@ -33,6 +34,7 @@ export const OnboardingDownloadPanel = ({
   downloadedBytes,
   totalBytes,
   etaSeconds,
+  currentFile,
   onPause,
   onCancel,
   onRetry,
@@ -75,6 +77,11 @@ export const OnboardingDownloadPanel = ({
           </span>
           <span>{formatEta(etaSeconds)}</span>
         </div>
+        {currentFile && !isFailed && (
+          <div className="mt-2 text-[10px] text-gray-500 truncate" title={currentFile}>
+            Downloading {currentFile.split('/').pop()}
+          </div>
+        )}
       </div>
 
       <div className="mt-6 flex items-center gap-3">

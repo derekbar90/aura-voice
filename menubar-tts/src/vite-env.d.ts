@@ -30,6 +30,7 @@ interface Window {
       downloadedBytes: number
       totalBytes: number
       etaSeconds?: number
+      currentFile?: string
       error?: string
     }) => void) => () => void
     startModelDownload: () => Promise<void>
