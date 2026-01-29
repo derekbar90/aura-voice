@@ -1,7 +1,7 @@
 {
   "name": "menubar-tts",
   "productName": "AuraVoice",
-  "description": "Local-first, high-performance Text-to-Speech for macOS powered by Qwen3 and MLX.",
+  "description": "AuraVoice is a local-first, high-performance Text-to-Speech app for macOS powered by Qwen3 and MLX.",
   "author": "Derek Barrera",
   "private": true,
   "version": "0.1.1",
