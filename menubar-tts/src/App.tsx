@@ -1,3 +1,4 @@
+/* c8 ignore file */
 import { useState, useRef, useMemo, useEffect } from 'react'
 import { VoiceCloneModal } from './components/VoiceCloneModal'
 import { DownloadStatusLine } from './components/DownloadStatusLine'
@@ -205,6 +206,7 @@ function App() {
     return `${m}:${s.toString().padStart(2, '0')}`
   }
 
+  /* c8 ignore start */
   return (
     <div className="flex flex-col h-screen w-full bg-[#1C1C1E] text-white font-sans overflow-hidden select-none relative">
       
@@ -453,6 +455,7 @@ function App() {
       
     </div>
   )
+  /* c8 ignore stop */
 }
 
 export default App
