@@ -15,4 +15,5 @@
 - [x] Task: Add UI tests / component tests for onboarding states 493dc60
 - [x] Task: Wire onboarding download trigger and IPC flow 28366e1
 - [x] Task: Add tests for onboarding trigger and download controls cd7671c
+- [x] Task: Improve download progress updates during large files 7901ab3
 - [ ] Task: Conductor - User Manual Verification 'Onboarding UI + Footer Status' (Protocol in workflow.md)
