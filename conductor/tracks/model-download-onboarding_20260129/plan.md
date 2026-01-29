@@ -13,4 +13,6 @@
 - [x] Task: Implement blocking error state with Retry on failure 5c481cf
 - [x] Task: Surface download status in main footer status line 0133f2f
 - [x] Task: Add UI tests / component tests for onboarding states 493dc60
+- [x] Task: Wire onboarding download trigger and IPC flow 28366e1
+- [x] Task: Add tests for onboarding trigger and download controls cd7671c
 - [ ] Task: Conductor - User Manual Verification 'Onboarding UI + Footer Status' (Protocol in workflow.md)
