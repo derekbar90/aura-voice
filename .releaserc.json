@@ -3,6 +3,8 @@
   "plugins": [
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
+    ["@semantic-release/npm", { "npmPublish": false, "pkgRoot": "menubar-tts" }],
+    ["@semantic-release/exec", { "publishCmd": "npm --prefix menubar-tts run release" }],
     "@semantic-release/github"
   ]
 }
