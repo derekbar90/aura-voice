@@ -7,6 +7,8 @@ type Props = {
   totalBytes: number
   etaSeconds?: number
   currentFile?: string
+  currentFileBytes?: number
+  currentFileTotal?: number
   onPause: () => void
   onCancel: () => void
   onRetry?: () => void
@@ -18,7 +20,8 @@ const formatBytes = (bytes: number) => {
   const units = ['B', 'KB', 'MB', 'GB']
   const index = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), units.length - 1)
   const value = bytes / Math.pow(1024, index)
-  return `${value.toFixed(index === 0 ? 0 : 1)} ${units[index]}`
+  const decimals = index === 0 ? 0 : value < 10 ? 2 : 1
+  return `${value.toFixed(decimals)} ${units[index]}`
 }
 
 const formatEta = (seconds?: number) => {
@@ -35,6 +38,8 @@ export const OnboardingDownloadBanner = ({
   totalBytes,
   etaSeconds,
   currentFile,
+  currentFileBytes,
+  currentFileTotal,
   onPause,
   onCancel,
   onRetry,
@@ -45,6 +50,9 @@ export const OnboardingDownloadBanner = ({
   const pct = Math.min(Math.max(progressPercent, 0), 100)
   const subtitle = errorMessage || 'Download failed. Please retry.'
   const fileLabel = currentFile ? currentFile.split('/').pop() : null
+  const fileBytes = currentFileBytes ?? 0
+  const fileTotal = currentFileTotal ?? 0
+  const filePct = fileTotal ? Math.min(100, Math.round((fileBytes / fileTotal) * 100)) : null
 
   return (
     <div className="w-full max-w-4xl px-6">
@@ -116,6 +124,14 @@ export const OnboardingDownloadBanner = ({
               <span>{pct}%</span>
             )}
           </div>
+          {fileLabel && (
+            <div className="mt-2 flex items-center justify-between text-[10px] text-gray-500">
+              <span>
+                {formatBytes(fileBytes)} / {formatBytes(fileTotal || 0)}
+              </span>
+              {filePct !== null ? <span>{filePct}%</span> : <span>...</span>}
+            </div>
+          )}
         </div>
       </div>
     </div>

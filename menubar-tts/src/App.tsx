@@ -40,6 +40,8 @@ function App() {
     totalBytes: number
     etaSeconds?: number
     currentFile?: string
+    currentFileBytes?: number
+    currentFileTotal?: number
     error?: string
   } | null>(null)
   const hasRequestedDownload = useRef(false)
@@ -244,6 +246,8 @@ function App() {
     downloadedBytes: 0,
     totalBytes: 0,
     currentFile: undefined,
+    currentFileBytes: undefined,
+    currentFileTotal: undefined,
   }
 
   const showDownloadBanner = downloadRequested && !['completed', 'canceled'].includes(resolvedDownloadState.status)
@@ -263,14 +267,16 @@ function App() {
               status={resolvedDownloadState.status}
               progressPercent={resolvedDownloadState.progressPercent}
               downloadedBytes={resolvedDownloadState.downloadedBytes}
-              totalBytes={resolvedDownloadState.totalBytes}
-              etaSeconds={resolvedDownloadState.etaSeconds}
-              currentFile={resolvedDownloadState.currentFile}
-              onPause={handlePauseDownload}
-              onCancel={handleCancelDownload}
-              onRetry={handleRetryDownload}
-              errorMessage={resolvedDownloadState.error}
-            />
+            totalBytes={resolvedDownloadState.totalBytes}
+            etaSeconds={resolvedDownloadState.etaSeconds}
+            currentFile={resolvedDownloadState.currentFile}
+            currentFileBytes={resolvedDownloadState.currentFileBytes}
+            currentFileTotal={resolvedDownloadState.currentFileTotal}
+            onPause={handlePauseDownload}
+            onCancel={handleCancelDownload}
+            onRetry={handleRetryDownload}
+            errorMessage={resolvedDownloadState.error}
+          />
           </div>
         )}
         

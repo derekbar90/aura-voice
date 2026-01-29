@@ -16,6 +16,8 @@ export type DownloadState = {
   totalBytes: number
   etaSeconds?: number
   currentFile?: string
+  currentFileBytes?: number
+  currentFileTotal?: number
   error?: string
 }
 
@@ -128,6 +130,8 @@ export class ModelDownloadService extends EventEmitter {
     totalBytes: number
     etaSeconds?: number
     currentFile?: string
+    currentFileBytes?: number
+    currentFileTotal?: number
   }) {
     this.setState({
       status: 'downloading',
@@ -136,6 +140,8 @@ export class ModelDownloadService extends EventEmitter {
       totalBytes: progress.totalBytes,
       etaSeconds: progress.etaSeconds,
       currentFile: progress.currentFile,
+      currentFileBytes: progress.currentFileBytes,
+      currentFileTotal: progress.currentFileTotal,
     })
   }
 
@@ -165,6 +171,8 @@ export class ModelDownloadService extends EventEmitter {
             totalBytes: data.totalBytes ?? 0,
             etaSeconds: data.etaSeconds,
             currentFile: data.currentFile,
+            currentFileBytes: data.currentFileBytes,
+            currentFileTotal: data.currentFileTotal,
           })
         }
       } catch {

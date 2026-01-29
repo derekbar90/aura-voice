@@ -21,13 +21,28 @@ class ModelTqdm(base_tqdm):
     file_base = 0
     total_bytes = 0
     started_at = None
+    last_update_at = None
+    last_downloaded = 0
+    avg_rate = None
+    current_file_total = None
 
     def update(self, n=1):
         result = super().update(n)
         if self.total_bytes and self.started_at:
             downloaded = self.file_base + self.n
-            elapsed = max(time.time() - self.started_at, 1e-6)
+            now = time.time()
+            elapsed = max(now - self.started_at, 1e-6)
             rate = downloaded / elapsed
+            if self.last_update_at is not None:
+                window = max(now - self.last_update_at, 1e-6)
+                instant_rate = (downloaded - self.last_downloaded) / window
+                if instant_rate > 0:
+                    if self.avg_rate is None:
+                        self.avg_rate = instant_rate
+                    else:
+                        self.avg_rate = (self.avg_rate * 0.85) + (instant_rate * 0.15)
+            if self.avg_rate:
+                rate = self.avg_rate
             remaining = max(self.total_bytes - downloaded, 0)
             eta_seconds = int(remaining / rate) if rate > 0 else None
             percent = int((downloaded / self.total_bytes) * 100)
@@ -38,8 +53,12 @@ class ModelTqdm(base_tqdm):
                     "totalBytes": int(self.total_bytes),
                     "etaSeconds": eta_seconds,
                     "currentFile": self.current_file,
+                    "currentFileBytes": int(self.n),
+                    "currentFileTotal": int(self.current_file_total or 0),
                 }
             )
+            self.last_update_at = now
+            self.last_downloaded = downloaded
         return result
 
 
@@ -73,6 +92,7 @@ def main() -> None:
         ModelTqdm.file_base = downloaded
         ModelTqdm.total_bytes = total_bytes
         ModelTqdm.started_at = started_at
+        ModelTqdm.current_file_total = entry.size or 0
 
         emit({"event": "file", "path": entry.path, "size": entry.size or 0})
         hf_hub_download(repo_id, entry.path, revision=revision, tqdm_class=ModelTqdm)
