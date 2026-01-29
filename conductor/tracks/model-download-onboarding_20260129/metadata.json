@@ -1,0 +1,8 @@
+{
+  "track_id": "model-download-onboarding_20260129",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-01-29T00:58:18Z",
+  "updated_at": "2026-01-29T00:58:18Z",
+  "description": "Improve first-run onboarding by starting model download during onboarding, showing progress and status, and avoiding first-use surprises."
+}

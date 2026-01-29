@@ -23,6 +23,7 @@ interface Window {
       audioData: string
       mimeType: string
     }>
+    onStatus: (callback: (status: string) => void) => () => void
     openFile: () => Promise<string | null>
     saveVoice: (name: string, filePath: string) => Promise<{ id: string; name: string; path: string; transcript?: string }>
     saveRecording: (name: string, buffer: ArrayBuffer, transcript?: string) => Promise<{ id: string; name: string; path: string; transcript?: string }>

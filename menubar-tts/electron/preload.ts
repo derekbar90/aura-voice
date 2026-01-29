@@ -47,6 +47,11 @@ contextBridge.exposeInMainWorld('tts', {
     ipcRenderer.on('tts:chunk', subscription)
     return () => ipcRenderer.off('tts:chunk', subscription)
   },
+  onStatus(callback: (status: string) => void) {
+    const subscription = (_event: any, status: string) => callback(status)
+    ipcRenderer.on('tts:status', subscription)
+    return () => ipcRenderer.off('tts:status', subscription)
+  },
   openFile() {
     return ipcRenderer.invoke('dialog:openFile')
   },

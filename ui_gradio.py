@@ -8,8 +8,6 @@ from mlx_audio.tts.utils import load_model
 
 import os
 
-# Force Hugging Face Hub to offline mode to skip fetching/checking updates
-os.environ["HF_HUB_OFFLINE"] = "1"
 MODEL_ID = "mlx-community/Qwen3-TTS-12Hz-0.6B-Base-6bit"
 VOICE_OPTIONS = ["", "Chelsie", "Ethan", "Vivian"]
 

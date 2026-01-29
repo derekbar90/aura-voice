@@ -28,6 +28,7 @@ function App() {
   const [textSize, setTextSize] = useState(24) // Base text size in px
   const [audioUrl, setAudioUrl] = useState('')
   const [isGenerating, setIsGenerating] = useState(false)
+  const [ttsStatus, setTtsStatus] = useState('')
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
@@ -67,6 +68,17 @@ function App() {
     })
   }, [bridgeReady])
 
+  useEffect(() => {
+    if (!bridgeReady) return
+    if (typeof window.tts?.onStatus !== 'function') return
+    const unsubscribe = window.tts.onStatus((status: string) => {
+      setTtsStatus(status)
+    })
+    return () => {
+      if (typeof unsubscribe === 'function') unsubscribe()
+    }
+  }, [bridgeReady])
+
   // Auto-play when audioUrl changes
   useEffect(() => {
     if (audioUrl && audioRef.current) {
@@ -82,6 +94,7 @@ function App() {
   const handleGenerate = async () => {
     if (!bridgeReady) return
     setIsGenerating(true)
+    setTtsStatus('Starting...')
     try {
       const result = await window.tts.generate({
         text,
@@ -102,6 +115,7 @@ function App() {
       console.error(err)
     } finally {
       setIsGenerating(false)
+      setTimeout(() => setTtsStatus(''), 1500)
     }
   }
 
@@ -386,6 +400,11 @@ function App() {
         
         {/* Progress & Action */}
         <div className="flex items-center gap-4 shrink-0 justify-end min-w-0">
+            {isGenerating && ttsStatus && (
+              <div className="hidden sm:block text-[10px] text-gray-400 font-mono truncate max-w-[220px]" title={ttsStatus}>
+                {ttsStatus}
+              </div>
+            )}
             <div className="hidden sm:block text-xs text-gray-400 font-mono tabular-nums whitespace-nowrap">
                 {formatTime(currentTime)} / {formatTime(duration)}
             </div>

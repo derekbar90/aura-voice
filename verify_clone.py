@@ -7,7 +7,6 @@ REF_AUDIO = "/Users/derekbarrera/Library/Application Support/menubar-tts/custom_
 REF_TEXT = "I enjoy reading about the history of space exploration."
 TEXT = "Hello, this is a test. This application is designed to read content to you in a clear, natural voice. Enjoy the experience."
 OUTPUT_DIR = "debug_output"
-os.environ["HF_HUB_OFFLINE"] = "1"
 MODEL_ID = "mlx-community/Qwen3-TTS-12Hz-0.6B-Base-6bit"
 
 os.makedirs(OUTPUT_DIR, exist_ok=True)
@@ -35,8 +34,10 @@ try:
         output_path=OUTPUT_DIR,
         file_prefix="verify_clone_asd_no_ref_text",
         audio_format="wav",
-        verbose=True
+        verbose=True,
     )
-    print(f"Generation complete. Check {OUTPUT_DIR}/verify_clone_asd_no_ref_text_000.wav")
+    print(
+        f"Generation complete. Check {OUTPUT_DIR}/verify_clone_asd_no_ref_text_000.wav"
+    )
 except Exception as e:
     print(f"Generation failed: {e}")

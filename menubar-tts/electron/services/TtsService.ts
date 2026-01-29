@@ -26,7 +26,10 @@ export class TtsService {
     this.userDataPath = userDataPath
   }
 
-  async generate(payload: TtsPayload): Promise<{ audioPath: string, audioData: string, mimeType: string }> {
+  async generate(
+    payload: TtsPayload,
+    onStatus?: (status: string) => void
+  ): Promise<{ audioPath: string, audioData: string, mimeType: string }> {
     const { 
       text, voice, speed, pitch, gender, instruct, refAudioPath, refText, exaggeration, cfgScale, ddpmSteps 
     } = payload
@@ -72,19 +75,42 @@ export class TtsService {
 
     console.log('Running TTS Spawn:', pythonPath, args.join(' '))
 
+    let lastStatus = ''
+    const pushStatus = (status: string) => {
+      const next = status.trim()
+      if (!next || next === lastStatus) return
+      lastStatus = next
+      onStatus?.(next)
+    }
+
+    const parseStatusLines = (text: string) => {
+      const lines = text.split(/[\r\n]+/).map((line) => line.trim()).filter(Boolean)
+      for (const line of lines) {
+        if (/\b(Downloading|Resolving|Fetching|Loading)\b/i.test(line)) {
+          pushStatus(line)
+          continue
+        }
+        if (/\b\d{1,3}%\b/.test(line)) {
+          pushStatus(line)
+        }
+      }
+    }
+
+    pushStatus('Preparing model...')
+
     await new Promise<void>((resolve, reject) => {
-      // Set HF_HUB_OFFLINE=1 to prevent checking the hub
-      const env = { ...process.env, HF_HUB_OFFLINE: '1' }
-      const child = spawn(pythonPath, args, { env, cwd })
+      const child = spawn(pythonPath, args, { env: process.env, cwd })
       let stderr = ''
 
       child.stdout.on('data', (data) => console.log('[TTS stdout]:', data.toString()))
       child.stderr.on('data', (data) => {
         const str = data.toString()
         stderr += str
+        parseStatusLines(str)
         console.error('[TTS stderr]:', str)
       })
 
+      child.on('spawn', () => pushStatus('Generating audio...'))
       child.on('error', (err) => reject(err))
       child.on('close', (code) => {
         if (code === 0) resolve()

@@ -215,7 +215,19 @@ ipcMain.handle('voices:delete', async (_event, id) => {
 })
 
 ipcMain.handle('tts:generate', async (_event, payload) => {
-  return ttsService.generate(payload)
+  const sendStatus = (status: string) => {
+    if (!win || win.isDestroyed()) return
+    win.webContents.send('tts:status', status)
+  }
+
+  try {
+    const result = await ttsService.generate(payload, sendStatus)
+    sendStatus('Audio ready')
+    return result
+  } catch (err) {
+    sendStatus('TTS failed')
+    throw err
+  }
 })
 
 ipcMain.on('preload:ready', () => {
