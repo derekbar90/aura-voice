@@ -1,7 +1,6 @@
-import { PropsWithChildren } from 'react'
 import { OnboardingDownloadPanel } from './OnboardingDownloadPanel'
 
-type Props = PropsWithChildren<{
+type Props = {
   status: 'idle' | 'downloading' | 'paused' | 'completed' | 'failed' | 'canceled'
   progressPercent: number
   downloadedBytes: number
@@ -11,10 +10,9 @@ type Props = PropsWithChildren<{
   onCancel: () => void
   onRetry?: () => void
   errorMessage?: string
-}>
+}
 
 export const OnboardingDownloadOverlay = ({
-  children,
   status,
   progressPercent,
   downloadedBytes,
@@ -26,6 +24,9 @@ export const OnboardingDownloadOverlay = ({
   errorMessage,
 }: Props) => {
   const isFailed = status === 'failed'
+  const isIdle = status === 'idle' || status === 'completed'
+
+  if (isIdle) return null
 
   const panel = (
     <OnboardingDownloadPanel
@@ -43,27 +44,21 @@ export const OnboardingDownloadOverlay = ({
 
   if (isFailed) {
     return (
-      <div className="relative h-full w-full">
-        {children}
-        <div className="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-          <div className="pointer-events-auto">
-            {panel}
-          </div>
+      <div className="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+        <div className="pointer-events-auto">
+          {panel}
         </div>
       </div>
     )
   }
 
   return (
-    <div className="relative h-full w-full">
-      {children}
-      <div className="pointer-events-none absolute inset-0 flex items-start justify-end p-6">
-        <div className="pointer-events-auto">
-          {panel}
-          <p className="mt-3 text-xs text-gray-400 text-right">
-            Keep exploring while the model finishes downloading.
-          </p>
-        </div>
+    <div className="pointer-events-none absolute inset-0 flex items-start justify-end p-6">
+      <div className="pointer-events-auto">
+        {panel}
+        <p className="mt-3 text-xs text-gray-400 text-right">
+          Keep exploring while the model finishes downloading.
+        </p>
       </div>
     </div>
   )

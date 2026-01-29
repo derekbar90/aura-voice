@@ -32,6 +32,11 @@ interface Window {
       etaSeconds?: number
       error?: string
     }) => void) => () => void
+    startModelDownload: () => Promise<void>
+    pauseModelDownload: () => Promise<void>
+    resumeModelDownload: () => Promise<void>
+    cancelModelDownload: () => Promise<void>
+    retryModelDownload: () => Promise<void>
     openFile: () => Promise<string | null>
     saveVoice: (name: string, filePath: string) => Promise<{ id: string; name: string; path: string; transcript?: string }>
     saveRecording: (name: string, buffer: ArrayBuffer, transcript?: string) => Promise<{ id: string; name: string; path: string; transcript?: string }>

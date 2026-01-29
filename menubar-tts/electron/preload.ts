@@ -57,6 +57,21 @@ contextBridge.exposeInMainWorld('tts', {
     ipcRenderer.on('model:download:status', subscription)
     return () => ipcRenderer.off('model:download:status', subscription)
   },
+  startModelDownload() {
+    return ipcRenderer.invoke('model:download:start')
+  },
+  pauseModelDownload() {
+    return ipcRenderer.invoke('model:download:pause')
+  },
+  resumeModelDownload() {
+    return ipcRenderer.invoke('model:download:resume')
+  },
+  cancelModelDownload() {
+    return ipcRenderer.invoke('model:download:cancel')
+  },
+  retryModelDownload() {
+    return ipcRenderer.invoke('model:download:retry')
+  },
   openFile() {
     return ipcRenderer.invoke('dialog:openFile')
   },

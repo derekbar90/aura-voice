@@ -43,6 +43,7 @@ jobs:
           cp -r .venv menubar-tts/python-engine/
           cp tts_server.py menubar-tts/python-engine/
           cp pyproject.toml menubar-tts/python-engine/
+          cp download_model.py menubar-tts/python-engine/
 
       - name: Set up Node.js
         uses: actions/setup-node@v4

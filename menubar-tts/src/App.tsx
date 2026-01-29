@@ -1,6 +1,7 @@
 /* c8 ignore file */
 import { useState, useRef, useMemo, useEffect } from 'react'
 import { VoiceCloneModal } from './components/VoiceCloneModal'
+import { OnboardingDownloadOverlay } from './components/OnboardingDownloadOverlay'
 import { DownloadStatusLine } from './components/DownloadStatusLine'
 import { useAudioVisualizer } from './hooks/useAudioVisualizer'
 
@@ -31,6 +32,7 @@ function App() {
   const [audioUrl, setAudioUrl] = useState('')
   const [isGenerating, setIsGenerating] = useState(false)
   const [ttsStatus, setTtsStatus] = useState('')
+  const [downloadRequested, setDownloadRequested] = useState(false)
   const [modelDownloadState, setModelDownloadState] = useState<{
     status: 'idle' | 'downloading' | 'paused' | 'completed' | 'failed' | 'canceled'
     progressPercent: number
@@ -39,6 +41,7 @@ function App() {
     etaSeconds?: number
     error?: string
   } | null>(null)
+  const hasRequestedDownload = useRef(false)
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
@@ -95,6 +98,15 @@ function App() {
     const unsubscribe = window.tts.onModelDownloadStatus((state) => {
       setModelDownloadState(state)
     })
+
+    if (!hasRequestedDownload.current && typeof window.tts?.startModelDownload === 'function') {
+      hasRequestedDownload.current = true
+      setDownloadRequested(true)
+      Promise.resolve(window.tts.startModelDownload()).catch((err) =>
+        console.error('Model download failed', err)
+      )
+    }
+
     return () => {
       if (typeof unsubscribe === 'function') unsubscribe()
     }
@@ -206,6 +218,34 @@ function App() {
     return `${m}:${s.toString().padStart(2, '0')}`
   }
 
+  const handlePauseDownload = () => {
+    if (!window.tts) return
+    if (modelDownloadState?.status === 'paused') {
+      window.tts.resumeModelDownload?.()
+      return
+    }
+    window.tts.pauseModelDownload?.()
+  }
+
+  const handleCancelDownload = () => {
+    if (!window.tts) return
+    window.tts.cancelModelDownload?.()
+  }
+
+  const handleRetryDownload = () => {
+    if (!window.tts) return
+    window.tts.retryModelDownload?.()
+  }
+
+  const resolvedDownloadState = modelDownloadState ?? {
+    status: downloadRequested ? 'downloading' : 'idle',
+    progressPercent: 0,
+    downloadedBytes: 0,
+    totalBytes: 0,
+  }
+
+  const showDownloadOverlay = downloadRequested && resolvedDownloadState.status !== 'completed'
+
   /* c8 ignore start */
   return (
     <div className="flex flex-col h-screen w-full bg-[#1C1C1E] text-white font-sans overflow-hidden select-none relative">
@@ -215,6 +255,19 @@ function App() {
 
       {/* Main Content */}
       <main className="flex-1 relative flex flex-col items-center justify-start overflow-hidden">
+        {showDownloadOverlay && (
+          <OnboardingDownloadOverlay
+            status={resolvedDownloadState.status}
+            progressPercent={resolvedDownloadState.progressPercent}
+            downloadedBytes={resolvedDownloadState.downloadedBytes}
+            totalBytes={resolvedDownloadState.totalBytes}
+            etaSeconds={resolvedDownloadState.etaSeconds}
+            onPause={handlePauseDownload}
+            onCancel={handleCancelDownload}
+            onRetry={handleRetryDownload}
+            errorMessage={resolvedDownloadState.error}
+          />
+        )}
         
         {/* Floating Toolbar */}
         <div className="absolute top-8 z-40 bg-[#2C2C2E]/80 backdrop-blur-md border border-white/10 rounded-full px-2 py-1.5 flex items-center gap-1 shadow-2xl animate-fade-in-down whitespace-nowrap max-w-[95%] pointer-events-auto">

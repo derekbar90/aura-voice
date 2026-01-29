@@ -5,6 +5,8 @@ import fs from 'node:fs'
 import { PythonService } from './services/PythonService'
 import { VoiceService } from './services/VoiceService'
 import { TtsService } from './services/TtsService'
+import { ModelDownloadService } from './services/ModelDownloadService'
+import { registerModelDownloadIpc } from './ipc/registerModelDownloadIpc'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -30,6 +32,7 @@ let isQuitting = false
 let pythonService: PythonService
 let voiceService: VoiceService
 let ttsService: TtsService
+let modelDownloadService: ModelDownloadService | null = null
 
 function initializeServices() {
   const userDataPath = app.getPath('userData')
@@ -38,6 +41,7 @@ function initializeServices() {
   pythonService = new PythonService(appRoot, app.isPackaged, process.resourcesPath)
   voiceService = new VoiceService(userDataPath)
   ttsService = new TtsService(pythonService, userDataPath)
+  modelDownloadService = new ModelDownloadService()
 }
 
 function createWindow() {
@@ -71,6 +75,22 @@ function createWindow() {
       preload: fs.existsSync(preloadCjs) ? preloadCjs : preloadMjs,
     },
   })
+
+  if (modelDownloadService) {
+    registerModelDownloadIpc(
+      ipcMain,
+      win.webContents,
+      modelDownloadService,
+      () => ({
+        pythonPath: pythonService.resolvePath(),
+        scriptPath: path.join(pythonService.getRepoRoot(), 'download_model.py'),
+        modelId: 'mlx-community/Qwen3-TTS-12Hz-0.6B-Base-6bit',
+        cwd: pythonService.getRepoRoot(),
+      })
+    )
+  } else {
+    console.warn('Model download service not initialized')
+  }
 
   // Ensure app is treated as a foreground app during dev
   if (IS_DEV && process.platform === 'darwin') {
@@ -214,7 +234,7 @@ ipcMain.handle('voices:delete', async (_event, id) => {
   return voiceService.delete(id)
 })
 
-ipcMain.handle('tts:generate', async (_event, payload) => {
+  ipcMain.handle('tts:generate', async (_event, payload) => {
   const sendStatus = (status: string) => {
     if (!win || win.isDestroyed()) return
     win.webContents.send('tts:status', status)
@@ -228,7 +248,8 @@ ipcMain.handle('tts:generate', async (_event, payload) => {
     sendStatus('TTS failed')
     throw err
   }
-})
+  })
+
 
 ipcMain.on('preload:ready', () => {
   console.info('Preload bridge ready')
