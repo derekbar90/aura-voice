@@ -1,5 +1,6 @@
 import argparse
 import json
+import os
 import time
 
 from tqdm.auto import tqdm as base_tqdm
@@ -25,6 +26,13 @@ class ModelTqdm(base_tqdm):
     last_downloaded = 0
     avg_rate = None
     current_file_total = None
+
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault("disable", False)
+        kwargs.setdefault("mininterval", 0.2)
+        kwargs.setdefault("miniters", 1)
+        kwargs.setdefault("smoothing", 0.0)
+        super().__init__(*args, **kwargs)
 
     def update(self, n=1):
         result = super().update(n)
@@ -67,6 +75,8 @@ def main() -> None:
     parser.add_argument("--model", required=True)
     parser.add_argument("--revision", default=None)
     args = parser.parse_args()
+
+    os.environ.setdefault("HF_HUB_DISABLE_PROGRESS_BARS", "0")
 
     api = HfApi()
     repo_id = args.model
