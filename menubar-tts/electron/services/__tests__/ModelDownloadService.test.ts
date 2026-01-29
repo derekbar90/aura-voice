@@ -37,6 +37,18 @@ describe('ModelDownloadService', () => {
     expect(next.state.status).toBe('completed')
   })
 
+  it('retries after failure by returning to downloading', () => {
+    const service = new ModelDownloadService()
+
+    service.start()
+    service.fail('network error')
+    expect(service.state.status).toBe('failed')
+
+    service.retry()
+    expect(service.state.status).toBe('downloading')
+    expect(service.state.error).toBeUndefined()
+  })
+
   it('spawns the model download helper and updates progress', () => {
     const stdoutHandlers: Array<(data: Buffer) => void> = []
     const mockChild = {

@@ -39,6 +39,14 @@ export class ModelDownloadService extends EventEmitter {
     })
   }
 
+  retry() {
+    if (this.activeProcess && !this.activeProcess.killed) {
+      this.activeProcess.kill('SIGTERM')
+      this.activeProcess = undefined
+    }
+    this.start()
+  }
+
   startDownload(options: {
     pythonPath: string
     scriptPath: string

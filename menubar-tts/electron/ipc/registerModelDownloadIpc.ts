@@ -9,7 +9,7 @@ export const registerModelDownloadIpc = (
   ipcMain.handle('model:download:start', () => service.start())
   ipcMain.handle('model:download:pause', () => service.pause())
   ipcMain.handle('model:download:cancel', () => service.cancel())
-  ipcMain.handle('model:download:retry', () => service.start())
+  ipcMain.handle('model:download:retry', () => service.retry())
 
   service.on('state', (state) => {
     sender.send('model:download:status', state)
