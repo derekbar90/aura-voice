@@ -39,4 +39,21 @@ describe('OnboardingDownloadPanel', () => {
 
     expect(screen.getAllByText(/local model/i).length).toBeGreaterThan(0)
   })
+
+  it('shows a friendly paused label', () => {
+    render(
+      <OnboardingDownloadPanel
+        status="paused"
+        progressPercent={50}
+        downloadedBytes={500}
+        totalBytes={1000}
+        onPause={() => undefined}
+        onCancel={() => undefined}
+      />
+    )
+
+    const label = screen.getByText('Paused')
+    expect(label).toBeTruthy()
+    expect(label.getAttribute('aria-live')).toBe('polite')
+  })
 })

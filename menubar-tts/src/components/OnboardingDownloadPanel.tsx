@@ -102,7 +102,10 @@ export const OnboardingDownloadPanel = ({
         >
           Cancel
         </button>
-        <div className="ml-auto text-[10px] uppercase tracking-widest text-gray-500">
+        <div
+          className="ml-auto text-[10px] uppercase tracking-widest text-gray-500"
+          aria-live="polite"
+        >
           {status === 'paused' ? 'Paused' : status}
         </div>
       </div>
