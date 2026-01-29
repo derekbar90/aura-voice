@@ -84,4 +84,40 @@ describe('ModelDownloadService', () => {
     expect(service.state.progressPercent).toBe(40)
     expect(service.state.totalBytes).toBe(1000)
   })
+
+  it('handles start and complete events from download output', () => {
+    const stdoutHandlers: Array<(data: Buffer) => void> = []
+    const mockChild = {
+      stdout: { on: vi.fn((_event, handler) => stdoutHandlers.push(handler)) },
+      stderr: { on: vi.fn() },
+      on: vi.fn(),
+    }
+    vi.mocked(spawn).mockReturnValue(mockChild as any)
+
+    const service = new ModelDownloadService()
+    service.startDownload({
+      pythonPath: '/mock/python',
+      scriptPath: '/mock/script.py',
+      modelId: 'mlx-community/Qwen3-TTS-12Hz-0.6B-Base-6bit',
+      cwd: '/mock/repo',
+    })
+
+    const startPayload = { event: 'start', totalBytes: 2048 }
+    const completePayload = { event: 'complete' }
+
+    for (const handler of stdoutHandlers) {
+      handler(Buffer.from(`MODEL_DOWNLOAD ${JSON.stringify(startPayload)}\n`))
+      handler(Buffer.from(`MODEL_DOWNLOAD ${JSON.stringify(completePayload)}\n`))
+    }
+
+    expect(service.state.totalBytes).toBe(2048)
+    expect(service.state.status).toBe('completed')
+  })
+
+  it('ignores cancel when already completed', () => {
+    const service = new ModelDownloadService()
+    service.complete()
+    service.cancel()
+    expect(service.state.status).toBe('completed')
+  })
 })

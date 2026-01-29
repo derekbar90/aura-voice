@@ -44,6 +44,29 @@ describe('VoiceService', () => {
     expect(list).toEqual(mockVoices)
   })
 
+  it('returns empty list when registry is missing', async () => {
+    vi.mocked(fsp.readFile).mockRejectedValue(new Error('Missing'))
+
+    const list = await voiceService.list()
+    expect(list).toEqual([])
+  })
+
+  it('saves recordings with transcript metadata', async () => {
+    vi.mocked(fsp.readFile).mockRejectedValue(new Error('File not found'))
+
+    const result = await voiceService.saveFromBuffer(
+      'Recorded Voice',
+      Buffer.from('audio'),
+      'hello world'
+    )
+
+    expect(fsp.writeFile).toHaveBeenCalledWith(
+      expect.stringContaining('_recording.wav'),
+      expect.any(Buffer)
+    )
+    expect(result.transcript).toBe('hello world')
+  })
+
   it('should delete voice and its file', async () => {
     const mockVoices = [{ id: '1', name: 'To Delete', path: '/path/to/delete.wav' }]
     vi.mocked(fsp.readFile).mockResolvedValue(JSON.stringify(mockVoices))
@@ -52,5 +75,15 @@ describe('VoiceService', () => {
     
     expect(fsp.unlink).toHaveBeenCalledWith('/path/to/delete.wav')
     expect(result).toHaveLength(0)
+  })
+
+  it('continues delete when file removal fails', async () => {
+    const mockVoices = [{ id: '1', name: 'To Delete', path: '/path/to/delete.wav' }]
+    vi.mocked(fsp.readFile).mockResolvedValue(JSON.stringify(mockVoices))
+    vi.mocked(fsp.unlink).mockRejectedValue(new Error('Missing file'))
+
+    const result = await voiceService.delete('1')
+
+    expect(result).toEqual([])
   })
 })
