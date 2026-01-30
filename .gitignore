@@ -27,7 +27,7 @@ debug_output/
 output.wav
 
 # Large Model Weights
-Qwen3-TTS-12Hz-0.6B-Base-6bit/
+Qwen3-TTS-12Hz-1.7B-VoiceDesign-bf16/
 
 # IDEs
 .vscode/

@@ -42,10 +42,25 @@ contextBridge.exposeInMainWorld('tts', {
   generateStream(payload: any) {
     return ipcRenderer.invoke('tts:generateStream', payload)
   },
-  onChunk(callback: (chunk: string) => void) {
-    const subscription = (_event: any, chunk: string) => callback(chunk)
+  onChunk(callback: (chunk: Uint8Array) => void) {
+    const subscription = (_event: any, chunk: Uint8Array) => callback(chunk)
     ipcRenderer.on('tts:chunk', subscription)
     return () => ipcRenderer.off('tts:chunk', subscription)
+  },
+  onStreamStart(callback: (info: { sampleRate: number; channels: number }) => void) {
+    const subscription = (_event: any, info: { sampleRate: number; channels: number }) => callback(info)
+    ipcRenderer.on('tts:stream-start', subscription)
+    return () => ipcRenderer.off('tts:stream-start', subscription)
+  },
+  onStreamEnd(callback: () => void) {
+    const subscription = () => callback()
+    ipcRenderer.on('tts:stream-end', subscription)
+    return () => ipcRenderer.off('tts:stream-end', subscription)
+  },
+  onStreamError(callback: (message: string) => void) {
+    const subscription = (_event: any, message: string) => callback(message)
+    ipcRenderer.on('tts:stream-error', subscription)
+    return () => ipcRenderer.off('tts:stream-error', subscription)
   },
   onStatus(callback: (status: string) => void) {
     const subscription = (_event: any, status: string) => callback(status)

@@ -9,7 +9,7 @@ TEXT = "This is a test of voice cloning."
 
 import os
 
-MODEL_ID = "mlx-community/Qwen3-TTS-12Hz-0.6B-Base-6bit"
+MODEL_ID = "mlx-community/Qwen3-TTS-12Hz-1.7B-VoiceDesign-bf16"
 
 print("Loading model...")
 model = load_model(MODEL_ID)

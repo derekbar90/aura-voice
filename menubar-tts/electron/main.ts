@@ -84,7 +84,7 @@ function createWindow() {
       () => ({
         pythonPath: pythonService.resolvePath(),
         scriptPath: path.join(pythonService.getRepoRoot(), 'download_model.py'),
-        modelId: 'mlx-community/Qwen3-TTS-12Hz-0.6B-Base-6bit',
+        modelId: 'mlx-community/Qwen3-TTS-12Hz-1.7B-VoiceDesign-bf16',
         cwd: pythonService.getRepoRoot(),
       })
     )
@@ -235,10 +235,10 @@ ipcMain.handle('voices:delete', async (_event, id) => {
 })
 
   ipcMain.handle('tts:generate', async (_event, payload) => {
-  const sendStatus = (status: string) => {
-    if (!win || win.isDestroyed()) return
-    win.webContents.send('tts:status', status)
-  }
+    const sendStatus = (status: string) => {
+      if (!win || win.isDestroyed()) return
+      win.webContents.send('tts:status', status)
+    }
 
   try {
     const result = await ttsService.generate(payload, sendStatus)
@@ -248,6 +248,48 @@ ipcMain.handle('voices:delete', async (_event, id) => {
     sendStatus('TTS failed')
     throw err
   }
+  })
+
+  ipcMain.handle('tts:generateStream', async (_event, payload) => {
+    const sendStatus = (status: string) => {
+      if (!win || win.isDestroyed()) return
+      win.webContents.send('tts:status', status)
+    }
+
+    const sendChunk = (chunk: Uint8Array) => {
+      if (!win || win.isDestroyed()) return
+      win.webContents.send('tts:chunk', Buffer.from(chunk))
+    }
+
+    const sendStreamStart = (info: { sampleRate: number; channels: number }) => {
+      if (!win || win.isDestroyed()) return
+      win.webContents.send('tts:stream-start', info)
+    }
+
+    const sendStreamEnd = () => {
+      if (!win || win.isDestroyed()) return
+      win.webContents.send('tts:stream-end')
+    }
+
+    const sendStreamError = (message: string) => {
+      if (!win || win.isDestroyed()) return
+      win.webContents.send('tts:stream-error', message)
+    }
+
+    try {
+      const info = await ttsService.generateStream(payload, {
+        onStatus: sendStatus,
+        onChunk: sendChunk,
+        onStart: sendStreamStart,
+        onComplete: sendStreamEnd,
+        onError: (err) => sendStreamError(err.message),
+      })
+      return info
+    } catch (err) {
+      sendStatus('TTS failed')
+      sendStreamError(err instanceof Error ? err.message : 'Streaming failed')
+      throw err
+    }
   })
 
 

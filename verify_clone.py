@@ -7,7 +7,7 @@ REF_AUDIO = "/Users/derekbarrera/Library/Application Support/menubar-tts/custom_
 REF_TEXT = "I enjoy reading about the history of space exploration."
 TEXT = "Hello, this is a test. This application is designed to read content to you in a clear, natural voice. Enjoy the experience."
 OUTPUT_DIR = "debug_output"
-MODEL_ID = "mlx-community/Qwen3-TTS-12Hz-0.6B-Base-6bit"
+MODEL_ID = "mlx-community/Qwen3-TTS-12Hz-1.7B-VoiceDesign-bf16"
 
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 

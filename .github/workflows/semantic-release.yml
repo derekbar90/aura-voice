@@ -31,14 +31,14 @@ jobs:
 
       - name: Create Placeholder Model (CI only)
         run: |
-          mkdir -p Qwen3-TTS-12Hz-0.6B-Base-6bit
-          echo '{"model_type": "qwen3"}' > Qwen3-TTS-12Hz-0.6B-Base-6bit/config.json
-          touch Qwen3-TTS-12Hz-0.6B-Base-6bit/placeholder.txt
+          mkdir -p Qwen3-TTS-12Hz-1.7B-VoiceDesign-bf16
+          echo '{"model_type": "qwen3"}' > Qwen3-TTS-12Hz-1.7B-VoiceDesign-bf16/config.json
+          touch Qwen3-TTS-12Hz-1.7B-VoiceDesign-bf16/placeholder.txt
 
       - name: Prepare Python Engine for Bundling
         run: |
           mkdir -p menubar-tts/python-engine
-          cp -r Qwen3-TTS-12Hz-0.6B-Base-6bit menubar-tts/python-engine/
+          cp -r Qwen3-TTS-12Hz-1.7B-VoiceDesign-bf16 menubar-tts/python-engine/
           cp -r .venv menubar-tts/python-engine/
           cp tts_server.py menubar-tts/python-engine/
           cp pyproject.toml menubar-tts/python-engine/

@@ -15,7 +15,12 @@ describe('App', () => {
     window.appBridge = { ready: true }
     window.tts = {
       generate: vi.fn(),
+      generateStream: vi.fn().mockResolvedValue({ sampleRate: 24000, channels: 1 }),
       listVoices: vi.fn().mockResolvedValue([]),
+      onChunk: vi.fn().mockReturnValue(() => undefined),
+      onStreamStart: vi.fn().mockReturnValue(() => undefined),
+      onStreamEnd: vi.fn().mockReturnValue(() => undefined),
+      onStreamError: vi.fn().mockReturnValue(() => undefined),
       onStatus: vi.fn().mockReturnValue(() => undefined),
       onModelDownloadStatus: vi.fn((callback) => {
         callback({
@@ -33,7 +38,7 @@ describe('App', () => {
       saveVoice: vi.fn(),
       saveRecording: vi.fn(),
       deleteVoice: vi.fn(),
-    }
+    } as any
   })
 
   it('renders footer actions and model download status', async () => {

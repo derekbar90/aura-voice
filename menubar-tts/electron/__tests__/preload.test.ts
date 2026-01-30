@@ -50,6 +50,21 @@ describe('preload', () => {
     expect(chunkHandler).toBeTypeOf('function')
     unsubscribeChunk()
 
+    const unsubscribeStreamStart = ttsBridge.onStreamStart(() => undefined)
+    const streamStartHandler = ipc.on.mock.calls.find((call: any[]) => call[0] === 'tts:stream-start')?.[1]
+    expect(streamStartHandler).toBeTypeOf('function')
+    unsubscribeStreamStart()
+
+    const unsubscribeStreamEnd = ttsBridge.onStreamEnd(() => undefined)
+    const streamEndHandler = ipc.on.mock.calls.find((call: any[]) => call[0] === 'tts:stream-end')?.[1]
+    expect(streamEndHandler).toBeTypeOf('function')
+    unsubscribeStreamEnd()
+
+    const unsubscribeStreamError = ttsBridge.onStreamError(() => undefined)
+    const streamErrorHandler = ipc.on.mock.calls.find((call: any[]) => call[0] === 'tts:stream-error')?.[1]
+    expect(streamErrorHandler).toBeTypeOf('function')
+    unsubscribeStreamError()
+
     const unsubscribeDownload = ttsBridge.onModelDownloadStatus(() => undefined)
     const downloadHandler = ipc.on.mock.calls.find((call: any[]) => call[0] === 'model:download:status')?.[1]
     expect(downloadHandler).toBeTypeOf('function')

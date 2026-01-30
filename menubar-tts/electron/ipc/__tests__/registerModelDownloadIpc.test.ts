@@ -11,7 +11,7 @@ describe('registerModelDownloadIpc', () => {
     registerModelDownloadIpc(ipcMain as any, sender as any, service, () => ({
       pythonPath: '/mock/python',
       scriptPath: '/mock/script.py',
-      modelId: 'mlx-community/Qwen3-TTS-12Hz-0.6B-Base-6bit',
+      modelId: 'mlx-community/Qwen3-TTS-12Hz-1.7B-VoiceDesign-bf16',
       cwd: '/mock/repo',
     }))
 
@@ -33,7 +33,7 @@ describe('registerModelDownloadIpc', () => {
     registerModelDownloadIpc(ipcMain as any, sender as any, service, () => ({
       pythonPath: '/mock/python',
       scriptPath: '/mock/script.py',
-      modelId: 'mlx-community/Qwen3-TTS-12Hz-0.6B-Base-6bit',
+      modelId: 'mlx-community/Qwen3-TTS-12Hz-1.7B-VoiceDesign-bf16',
       cwd: '/mock/repo',
     }))
 
@@ -52,7 +52,7 @@ describe('registerModelDownloadIpc', () => {
     const getOptions = vi.fn().mockReturnValue({
       pythonPath: '/mock/python',
       scriptPath: '/mock/script.py',
-      modelId: 'mlx-community/Qwen3-TTS-12Hz-0.6B-Base-6bit',
+      modelId: 'mlx-community/Qwen3-TTS-12Hz-1.7B-VoiceDesign-bf16',
       cwd: '/mock/repo',
     })
     const spy = vi.spyOn(service, 'startDownload').mockImplementation(() => undefined)

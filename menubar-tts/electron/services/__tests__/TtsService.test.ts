@@ -56,7 +56,7 @@ describe('TtsService', () => {
         '-m',
         'mlx_audio.tts.generate',
         '--model',
-        'mlx-community/Qwen3-TTS-12Hz-0.6B-Base-6bit',
+        'mlx-community/Qwen3-TTS-12Hz-1.7B-VoiceDesign-bf16',
         '--text',
         'Hello world',
         '--voice',

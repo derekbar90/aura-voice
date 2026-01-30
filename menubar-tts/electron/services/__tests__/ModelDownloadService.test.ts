@@ -56,7 +56,7 @@ describe('ModelDownloadService', () => {
     service.startDownload({
       pythonPath: '/mock/python',
       scriptPath: '/mock/script.py',
-      modelId: 'mlx-community/Qwen3-TTS-12Hz-0.6B-Base-6bit',
+      modelId: 'mlx-community/Qwen3-TTS-12Hz-1.7B-VoiceDesign-bf16',
       cwd: '/mock/repo',
     })
 
@@ -72,7 +72,7 @@ describe('ModelDownloadService', () => {
 
     expect(spawn).toHaveBeenCalledWith(
       '/mock/python',
-      ['/mock/script.py', '--model', 'mlx-community/Qwen3-TTS-12Hz-0.6B-Base-6bit'],
+      ['/mock/script.py', '--model', 'mlx-community/Qwen3-TTS-12Hz-1.7B-VoiceDesign-bf16'],
       expect.objectContaining({ cwd: '/mock/repo', env: expect.any(Object) })
     )
     expect(service.state.progressPercent).toBe(40)
@@ -92,7 +92,7 @@ describe('ModelDownloadService', () => {
     service.startDownload({
       pythonPath: '/mock/python',
       scriptPath: '/mock/script.py',
-      modelId: 'mlx-community/Qwen3-TTS-12Hz-0.6B-Base-6bit',
+      modelId: 'mlx-community/Qwen3-TTS-12Hz-1.7B-VoiceDesign-bf16',
       cwd: '/mock/repo',
     })
 

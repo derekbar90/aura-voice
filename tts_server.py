@@ -26,7 +26,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger("tts-server")
 
-MODEL_ID = "mlx-community/Qwen3-TTS-12Hz-0.6B-Base-6bit"
+MODEL_ID = "mlx-community/Qwen3-TTS-12Hz-1.7B-VoiceDesign-bf16"
 model_instance = None
 
 
@@ -86,13 +86,15 @@ async def stream_speech(req: TtsRequest):
             # Prepare arguments
             gen_kwargs = dict(
                 text=req.text,
-                voice=req.voice if req.voice else "af_heart",
                 speed=req.speed if req.speed else 1.0,
                 cfg_scale=req.cfg_scale if req.cfg_scale else 1.5,
                 ddpm_steps=req.ddpm_steps if req.ddpm_steps else 20,
                 stream=True,
                 instruct=req.instruct,
             )
+
+            if req.voice:
+                gen_kwargs["voice"] = req.voice
 
             if req.ref_audio:
                 from mlx_audio.tts.generate import load_audio
@@ -112,7 +114,16 @@ async def stream_speech(req: TtsRequest):
         except Exception as e:
             logger.error(f"Streaming generator error: {e}")
 
-    return StreamingResponse(generate_chunks(), media_type="application/octet-stream")
+    headers = {
+        "X-Sample-Rate": "24000",
+        "X-Channels": "1",
+        "X-Format": "f32le",
+    }
+    return StreamingResponse(
+        generate_chunks(),
+        media_type="application/octet-stream",
+        headers=headers,
+    )
 
 
 @app.post("/generate")

@@ -23,6 +23,23 @@ interface Window {
       audioData: string
       mimeType: string
     }>
+    generateStream: (payload: {
+      text: string
+      voice?: string
+      gender?: string
+      speed?: number
+      pitch?: number
+      instruct?: string
+      refAudioPath?: string
+      refText?: string
+      exaggeration?: number
+      cfgScale?: number
+      ddpmSteps?: number
+    }) => Promise<{ sampleRate: number; channels: number }>
+    onChunk: (callback: (chunk: Uint8Array) => void) => () => void
+    onStreamStart: (callback: (info: { sampleRate: number; channels: number }) => void) => () => void
+    onStreamEnd: (callback: () => void) => () => void
+    onStreamError: (callback: (message: string) => void) => () => void
     onStatus: (callback: (status: string) => void) => () => void
     onModelDownloadStatus: (callback: (state: {
       status: 'idle' | 'downloading' | 'completed' | 'failed' | 'canceled'
